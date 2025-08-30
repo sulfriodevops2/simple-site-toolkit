@@ -41,31 +41,39 @@ export function VRFCondensadoraCalculator() {
     tipoCondensadora: 'vertical',
     evaporadora: 'hi-wall',
     quantidade: '1',
-    nominal: '7'  // Adicionado nominal
+    nominal: '7'
   });
+
+  // Estado para lista de evaporadoras adicionadas
+  const [evaporators, setEvaporators] = useState<Array<{
+    type: string;
+    nominal: number;
+    realBTU: number;
+    qtd: number;
+  }>>([]);
 
   const [results, setResults] = useState<{ samsung: any; daikin: any } | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<"samsung" | "daikin">("samsung");
 
-  const handleCalculate = () => {
+  const recalculate = () => {
     const simultaneidadeValues = {
       corporativo: 110,
       padrao: 130,
       residencial: 145
     };
 
-    const qty = parseInt(params.quantidade) || 1;
-    const nominal = parseInt(params.nominal) || 7;
+    // Soma todas as evaporadoras (realBTU * qtd)
+    const totalCapacity = evaporators.reduce((acc, ev) => acc + (ev.realBTU * ev.qtd), 0);
     
-    // Busca valor real correto do mapa
-    const evapMap = EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP];
-    const realBTU = evapMap?.[nominal as keyof typeof evapMap] || 7507;
-    const totalCapacity = qty * realBTU;
+    if (totalCapacity === 0) {
+      setResults(null);
+      return;
+    }
     
     const entrada = [totalCapacity];
     const simultaneidade = simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
     
-    // Calcula para ambas as marcas considerando a orientação
+    // Calcula para ambas as marcas
     const samsungResult = calcularCondensadoraVRF(entrada, simultaneidade, "samsung", params.tipoCondensadora as any);
     const daikinResult = calcularCondensadoraVRF(entrada, simultaneidade, "daikin", params.tipoCondensadora as any);
 
@@ -75,10 +83,50 @@ export function VRFCondensadoraCalculator() {
     });
   };
 
-  // Recalcula automaticamente quando params mudam
+  const handleAdd = () => {
+    const nominal = parseInt(params.nominal) || 7;
+    const qtd = parseInt(params.quantidade) || 1;
+    const evapMap = EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP];
+    const realBTU = evapMap?.[nominal as keyof typeof evapMap] || 7507;
+
+    setEvaporators(prev => {
+      const exists = prev.find(e => e.type === params.evaporadora && e.nominal === nominal);
+      if (exists) {
+        // Acumula quantidade se já existe
+        return prev.map(e => 
+          e.type === params.evaporadora && e.nominal === nominal
+            ? { ...e, qtd: e.qtd + qtd }
+            : e
+        );
+      } else {
+        // Adiciona nova evaporadora
+        return [...prev, { type: params.evaporadora, nominal, realBTU, qtd }];
+      }
+    });
+  };
+
+  const handleChangeQtd = (index: number, value: number) => {
+    setEvaporators(prev => {
+      const updated = [...prev];
+      updated[index].qtd = Math.max(1, Math.floor(value || 1));
+      return updated;
+    });
+  };
+
+  const handleRemove = (index: number) => {
+    setEvaporators(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClear = () => {
+    setEvaporators([]);
+    setResults(null);
+    setParams({ simultaneidade: 'corporativo', tipoCondensadora: 'vertical', evaporadora: 'hi-wall', quantidade: '1', nominal: '7' });
+  };
+
+  // Recalcula automaticamente quando evaporators ou params de simultaneidade/orientação mudam
   useEffect(() => {
-    handleCalculate();
-  }, [params]);
+    recalculate();
+  }, [evaporators, params.simultaneidade, params.tipoCondensadora]);
 
   return (
     <HVACCard>
@@ -174,7 +222,10 @@ export function VRFCondensadoraCalculator() {
                 </Select>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => setParams({ simultaneidade: 'corporativo', tipoCondensadora: 'vertical', evaporadora: 'hi-wall', quantidade: '1', nominal: '7' })}>
+                <Button size="sm" onClick={handleAdd}>
+                  Adicionar
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleClear}>
                   Limpar
                 </Button>
               </div>
@@ -201,7 +252,7 @@ export function VRFCondensadoraCalculator() {
               </Button>
             </div>
             
-            {results && results[selectedBrand] ? (
+            {results && evaporators.length > 0 ? (
               <div className="space-y-3 text-sm">
                 {results[selectedBrand].condensadoraIdeal && (
                   <div className="p-3 bg-muted rounded-lg">
@@ -225,14 +276,14 @@ export function VRFCondensadoraCalculator() {
               </div>
             ) : (
               <p className="text-muted-foreground text-sm">
-                Configure os parâmetros e clique em "Adicionar" para ver os resultados
+                Adicione evaporadoras para ver os resultados
               </p>
             )}
           </div>
         </div>
 
         {/* Detalhes */}
-        {results && (
+        {results && evaporators.length > 0 && (
           <div className="border-t pt-6">
             <div className="flex gap-2 mb-4">
               <Button variant="outline" size="sm">Por unidade</Button>
@@ -259,27 +310,43 @@ export function VRFCondensadoraCalculator() {
                   <th className="text-left p-2">Nominal</th>
                   <th className="text-left p-2">Real (BTU/h)</th>
                   <th className="text-left p-2">Qtd</th>
+                  <th className="text-left p-2">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="p-2">1</td>
-                  <td className="p-2">{params.evaporadora === 'hi-wall' ? 'Hi Wall' : params.evaporadora === 'cassete' ? 'Cassete' : 'Piso Teto'}</td>
-                  <td className="p-2">{params.nominal}</td>
-                  <td className="p-2">{(() => {
-                    const evapMap = EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP];
-                    return (evapMap?.[parseInt(params.nominal) as keyof typeof evapMap] || 7507).toLocaleString();
-                  })()}</td>
-                  <td className="p-2">
-                    <Input 
-                      type="number" 
-                      min="1"
-                      value={params.quantidade} 
-                      onChange={(e) => setParams(prev => ({ ...prev, quantidade: e.target.value }))} 
-                      className="w-16 h-8" 
-                    />
-                  </td>
-                </tr>
+                {evaporators.length > 0 ? evaporators.map((evap, index) => (
+                  <tr key={index}>
+                    <td className="p-2">{index + 1}</td>
+                    <td className="p-2">{evap.type === 'hi-wall' ? 'Hi Wall' : evap.type === 'cassete' ? 'Cassete' : 'Piso Teto'}</td>
+                    <td className="p-2">{evap.nominal}</td>
+                    <td className="p-2">{evap.realBTU.toLocaleString()}</td>
+                    <td className="p-2">
+                      <Input 
+                        type="number" 
+                        min="1"
+                        value={evap.qtd} 
+                        onChange={(e) => handleChangeQtd(index, parseInt(e.target.value))} 
+                        className="w-16 h-8" 
+                      />
+                    </td>
+                    <td className="p-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleRemove(index)}
+                        className="h-8"
+                      >
+                        X
+                      </Button>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan={6} className="p-2 text-center text-muted-foreground">
+                      Adicione evaporadoras para calcular
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
