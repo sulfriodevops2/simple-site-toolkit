@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { StatusChip } from '@/components/ui/status-chip';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Thermometer, Settings } from 'lucide-react';
+import { calcularCondensadoraVRF } from '@/utils/vrf-calculator';
 
 export function VRFCondensadoraCalculator() {
   const [params, setParams] = useState({
@@ -17,10 +18,10 @@ export function VRFCondensadoraCalculator() {
     quantidade: '5'
   });
 
-  const [result, setResult] = useState<any | null>(null);
+  const [results, setResults] = useState<{ samsung: any; daikin: any } | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<"samsung" | "daikin">("samsung");
 
   const handleCalculate = () => {
-    // Lógica simplificada baseada na imagem
     const simultaneidadeValues = {
       corporativo: 1.10,
       padrao: 1.30,
@@ -28,29 +29,16 @@ export function VRFCondensadoraCalculator() {
     };
 
     const baseCapacity = parseInt(params.quantidade) * 5118; // Valor base do Hi Wall
-    const adjustedCapacity = baseCapacity * simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
+    const entrada = [baseCapacity];
+    const simultaneidade = simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
     
-    const condensadoraIdeal = {
-      modelo: 'Samsung VRF 8HP',
-      tipo: params.tipoCondensadora,
-      capacidadeReal: 76432,
-      simultaneidade: params.simultaneidade === 'corporativo' ? '13,4%' : '10,7%'
-    };
+    // Calcula para ambas as marcas
+    const samsungResult = calcularCondensadoraVRF(entrada, simultaneidade, "samsung");
+    const daikinResult = calcularCondensadoraVRF(entrada, simultaneidade, "daikin");
 
-    const umaAcima = {
-      modelo: 'Samsung VRF 10HP',
-      tipo: params.tipoCondensadora,
-      capacidadeReal: 95540,
-      simultaneidade: params.simultaneidade === 'corporativo' ? '10,7%' : '8,5%'
-    };
-
-    setResult({
-      condensadoraIdeal,
-      umaAcima,
-      somaEvaporadoras: baseCapacity,
-      capacidadeMinima: Math.round(adjustedCapacity),
-      marca: 'Samsung',
-      orientacao: params.tipoCondensadora
+    setResults({
+      samsung: { ...samsungResult, orientacao: params.tipoCondensadora },
+      daikin: { ...daikinResult, orientacao: params.tipoCondensadora }
     });
   };
 
@@ -146,31 +134,47 @@ export function VRFCondensadoraCalculator() {
             </div>
           </div>
 
-          {/* Resultado */}
+            {/* Resultado */}
           <div className="space-y-4">
             <h3 className="font-semibold text-sm">Resultado</h3>
             <div className="flex gap-2 mb-4">
-              <Badge variant="default">Samsung</Badge>
-              <Badge variant="outline">Daikin</Badge>
+              <Button 
+                variant={selectedBrand === "samsung" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setSelectedBrand("samsung")}
+              >
+                Samsung
+              </Button>
+              <Button 
+                variant={selectedBrand === "daikin" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setSelectedBrand("daikin")}
+              >
+                Daikin
+              </Button>
             </div>
             
-            {result ? (
+            {results && results[selectedBrand] ? (
               <div className="space-y-3 text-sm">
-                <div className="p-3 bg-muted rounded-lg">
-                  <p className="font-medium">Condensadora ideal: {result.condensadoraIdeal.modelo}</p>
-                  <p className="text-muted-foreground">{result.condensadoraIdeal.tipo} - Cap. real: {result.condensadoraIdeal.capacidadeReal.toLocaleString()} BTU/h</p>
-                  <StatusChip className="bg-green-100 text-green-800 mt-1">
-                    Simultaneidade: {result.condensadoraIdeal.simultaneidade}
-                  </StatusChip>
-                </div>
+                {results[selectedBrand].condensadoraIdeal && (
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="font-medium">Condensadora ideal: {results[selectedBrand].condensadoraIdeal.nome}</p>
+                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].condensadoraIdeal.nominal.toLocaleString()} BTU/h</p>
+                    <StatusChip className="bg-green-100 text-green-800 mt-1">
+                      Simultaneidade: {results[selectedBrand].condensadoraIdeal.simultaneidade}
+                    </StatusChip>
+                  </div>
+                )}
                 
-                <div className="p-3 bg-muted rounded-lg">
-                  <p className="font-medium">Uma acima: {result.umaAcima.modelo}</p>
-                  <p className="text-muted-foreground">{result.umaAcima.tipo} - Cap. real: {result.umaAcima.capacidadeReal.toLocaleString()} BTU/h</p>
-                  <StatusChip className="bg-green-100 text-green-800 mt-1">
-                    Simultaneidade: {result.umaAcima.simultaneidade}
-                  </StatusChip>
-                </div>
+                {results[selectedBrand].umaAcima && (
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="font-medium">Uma acima: {results[selectedBrand].umaAcima.nome}</p>
+                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAcima.nominal.toLocaleString()} BTU/h</p>
+                    <StatusChip className="bg-green-100 text-green-800 mt-1">
+                      Simultaneidade: {results[selectedBrand].umaAcima.simultaneidade}
+                    </StatusChip>
+                  </div>
+                )}
               </div>
             ) : (
               <p className="text-muted-foreground text-sm">
@@ -181,7 +185,7 @@ export function VRFCondensadoraCalculator() {
         </div>
 
         {/* Detalhes */}
-        {result && (
+        {results && (
           <div className="border-t pt-6">
             <div className="flex gap-2 mb-4">
               <Button variant="outline" size="sm">Por unidade</Button>
@@ -190,13 +194,13 @@ export function VRFCondensadoraCalculator() {
             
             <div className="grid grid-cols-2 gap-4 text-sm mb-4">
               <div>
-                <p><strong>Marca:</strong> {result.marca}</p>
+                <p><strong>Marca:</strong> {results[selectedBrand].marca}</p>
                 <p><strong>Simultaneidade (selecionada):</strong> {params.simultaneidade === 'corporativo' ? '110%' : params.simultaneidade === 'padrao' ? '130%' : '145%'}</p>
-                <p><strong>Capacidade mínima requerida (após simult.):</strong> {result.capacidadeMinima.toLocaleString()} BTU/h</p>
+                <p><strong>Capacidade mínima requerida (após simult.):</strong> {results[selectedBrand].capacidadeMinima.toLocaleString()} BTU/h</p>
               </div>
               <div>
-                <p><strong>Orientação:</strong> {result.orientacao}</p>
-                <p><strong>Soma das evaporadoras (válidas):</strong> {result.somaEvaporadoras.toLocaleString()} BTU/h</p>
+                <p><strong>Orientação:</strong> {results[selectedBrand].orientacao}</p>
+                <p><strong>Soma das evaporadoras (válidas):</strong> {results[selectedBrand].somaEvaporadoras.toLocaleString()} BTU/h</p>
               </div>
             </div>
 
