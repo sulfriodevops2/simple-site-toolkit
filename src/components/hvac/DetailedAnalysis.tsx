@@ -25,60 +25,58 @@ interface DetailedData {
 function parseDetails(details: string): DetailedData | null {
   if (!details) return null
   
-  const lines = details.split('\n').filter(line => line.trim())
+  const lines = details.split('\n')
   
-  // Parse entrada normalizada
-  const entradaLine = lines.find(line => line.includes('Entrada normalizada:'))
-  const entrada = entradaLine?.match(/\[(.*?)\]/)?.[1] || ''
+  // Extract entrada normalizada
+  const entradaMatch = details.match(/Entrada normalizada: \[(.*?)\]/)
+  const entrada = entradaMatch?.[1] || ''
   
-  // Parse soma
-  const somaLine = lines.find(line => line.includes('Soma das evaporadoras:'))
-  const soma = parseInt(somaLine?.split(':')[1]?.trim() || '0')
+  // Extract soma
+  const somaMatch = details.match(/Soma das evaporadoras: (\d+)/)
+  const soma = parseInt(somaMatch?.[1] || '0')
   
-  // Parse tag7
-  const tag7Line = lines.find(line => line.includes('7 tratado como 9'))
+  // Extract tag7 if exists
+  const tag7Match = details.match(/(7 tratado como 9[^\\n]*)/)
+  const tag7 = tag7Match?.[1] || undefined
   
-  // Parse modelos - procurar linhas que começam com ✔ ou ✖
+  // Extract models from lines that start with ✔ or ✖
   const modelos = lines
-    .filter(line => line.startsWith('✔') || line.startsWith('✖'))
+    .filter(line => line.match(/^[✔✖]/))
     .map(line => {
       const compativel = line.startsWith('✔')
       
-      // Parse nome (LG 18, Daikin 24, etc)
-      const nomeMatch = line.match(/[✔✖]\s+([A-Za-z]+\s+\d+)/)
+      // Extract model name (e.g., "LG 18", "Daikin 24")
+      const nomeMatch = line.match(/^[✔✖]\s+([A-Za-z]+\s+\d+(?:\s+[A-Za-z]+)?)/)
       const nome = nomeMatch?.[1] || ''
       
-      // Parse nominal
+      // Extract nominal value
       const nominalMatch = line.match(/nominal\s+(\d+)/)
       const nominal = parseInt(nominalMatch?.[1] || '0')
       
-      // Parse máx
+      // Extract max value
       const maxMatch = line.match(/máx\s+(\d+)/)
       const max = parseInt(maxMatch?.[1] || '0')
       
-      // Parse limite
-      const limiteMatch = line.match(/limite\s+\((\w+)\)\s+=\s+([\d.,]+)/)
+      // Extract limit and mode
+      const limiteMatch = line.match(/limite \((\w+)\) = ([\d.,]+)/)
       const modo = limiteMatch?.[1] || ''
       const limite = parseFloat(limiteMatch?.[2]?.replace(',', '.') || '0')
       
-      // Parse simultaneidade
-      const simultMatch = line.match(/Simultaneidade:\s+([\d,]+)%/)
-      const simultaneidade = parseFloat(simultMatch?.[1]?.replace(',', '.') || '0')
+      // Extract simultaneity percentage
+      const simultaneidadeMatch = line.match(/Simultaneidade: ([\d,]+)%/)
+      const simultaneidade = parseFloat(simultaneidadeMatch?.[1]?.replace(',', '.') || '0')
       
-      // Parse status
-      const statusMatch = line.match(/(Compatível|Ultrapassa limite|Combinação não listada)/)
-      const status = statusMatch?.[1] || ''
+      // Extract status (Compatível, Ultrapassa limite, etc.)
+      let status = 'Incompatível'
+      if (line.includes('Compatível')) status = 'Compatível'
+      else if (line.includes('Ultrapassa limite')) status = 'Ultrapassa limite'
+      else if (line.includes('Combinação não listada')) status = 'Combinação não listada'
       
       return { nome, nominal, max, limite, modo, status, simultaneidade, compativel }
     })
-    .filter(modelo => modelo.nome)
+    .filter(modelo => modelo.nome && !isNaN(modelo.nominal))
   
-  return {
-    entrada,
-    soma,
-    tag7: tag7Line?.replace(/.*7 tratado como 9/, '7 tratado como 9'),
-    modelos
-  }
+  return { entrada, soma, tag7, modelos }
 }
 
 export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
