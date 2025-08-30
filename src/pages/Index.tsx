@@ -1,11 +1,85 @@
-const Index = () => {
-  return (
-    <div className="min-h-screen w-full bg-gradient-bg flex items-center justify-center">
-      <h1 className="text-9xl md:text-10xl lg:text-11xl font-bold text-foreground text-shadow-glow text-shadow-default select-none cursor-default tracking-wider transition-all duration-500 hover:scale-105 hover:tracking-widest">
-        SULFRIO
-      </h1>
-    </div>
-  );
-};
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { HVACCard } from "@/components/ui/hvac-card"
+import { Calculator, Snowflake, Wind, Thermometer } from "lucide-react"
 
-export default Index;
+export default function Index() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90">
+      {/* Hero Section */}
+      <div className="flex flex-col items-center justify-center min-h-screen px-6">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-cool rounded-2xl flex items-center justify-center shadow-glow-cool">
+              <Snowflake className="w-8 h-8 text-background animate-pulse" />
+            </div>
+          </div>
+          <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-primary-cool via-foreground to-primary-cool bg-clip-text text-transparent mb-4">
+            SULFRIO
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8">
+            Sistema Avançado de Cálculo HVAC
+          </p>
+        </div>
+
+        {/* Navigation Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+          <Link to="/multi" className="group">
+            <HVACCard 
+              title="Multi Split" 
+              description="Calculadora para sistemas Multi Split"
+              variant="cool"
+              className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-cool/20 rounded-lg flex items-center justify-center">
+                    <Calculator className="w-5 h-5 text-primary-cool" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Sistemas Multi</div>
+                    <div className="text-xs text-muted-foreground">LG • Daikin • Samsung</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-primary-cool/10 rounded-full flex items-center justify-center group-hover:bg-primary-cool/20 transition-colors">
+                  <Wind className="w-4 h-4 text-primary-cool" />
+                </div>
+              </div>
+            </HVACCard>
+          </Link>
+
+          <Link to="/vrf" className="group">
+            <HVACCard 
+              title="VRF System" 
+              description="Calculadora para sistemas VRF"
+              variant="warm"
+              className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-warm/20 rounded-lg flex items-center justify-center">
+                    <Thermometer className="w-5 h-5 text-primary-warm" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Sistemas VRF</div>
+                    <div className="text-xs text-muted-foreground">Variable Refrigerant Flow</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-primary-warm/10 rounded-full flex items-center justify-center group-hover:bg-primary-warm/20 transition-colors">
+                  <Wind className="w-4 h-4 text-primary-warm" />
+                </div>
+              </div>
+            </HVACCard>
+          </Link>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-16 text-center">
+          <p className="text-sm text-muted-foreground">
+            Sistema desenvolvido para cálculos precisos de equipamentos HVAC
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

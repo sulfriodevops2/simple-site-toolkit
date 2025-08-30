@@ -28,6 +28,11 @@ export default {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
 				},
+				"primary-cool": "hsl(var(--primary-cool))",
+				"primary-warm": "hsl(var(--primary-warm))",
+				"system-green": "hsl(var(--system-green))",
+				"system-red": "hsl(var(--system-red))",
+				"system-blue": "hsl(var(--system-blue))",
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
@@ -64,7 +69,17 @@ export default {
 				}
 			},
 			backgroundImage: {
-				'gradient-bg': 'var(--gradient-bg)'
+				'gradient-bg': 'var(--gradient-bg)',
+				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+				"gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+				"gradient-cool": "var(--gradient-cool)",
+				"gradient-warm": "var(--gradient-warm)",
+				"gradient-card": "var(--gradient-card)",
+			},
+			boxShadow: {
+				"glow-cool": "var(--glow-cool)",
+				"glow-warm": "var(--glow-warm)",
+				"elevation": "var(--shadow-elevation)",
 			},
 			textShadow: {
 				'glow': 'var(--text-glow)',
