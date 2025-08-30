@@ -21,11 +21,9 @@ const EVAPORADORAS_MAP = (() => {
 
   return {
     "hi-wall": toMap(findTipo("Hi Wall")),
-    // Unifica Cassete 1 Via + Cassete 4 Vias para o seletor atual "cassete"
-    "cassete": toMap([
-      ...findTipo("Cassete 1 Via"),
-      ...findTipo("Cassete 4 Vias"),
-    ]),
+    "cassete-1-via": toMap(findTipo("Cassete 1 Via")),
+    "cassete-4-vias": toMap(findTipo("Cassete 4 Vias")),
+    "duto": toMap(findTipo("Duto")),
     "piso-teto": toMap(findTipo("Piso Teto")),
   } as Record<string, Record<number, number>>;
 })();
@@ -193,7 +191,9 @@ export function VRFCondensadoraCalculator() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="hi-wall">Hi Wall</SelectItem>
-                    <SelectItem value="cassete">Cassete</SelectItem>
+                    <SelectItem value="cassete-1-via">Cassete 1 Via</SelectItem>
+                    <SelectItem value="cassete-4-vias">Cassete 4 Vias</SelectItem>
+                    <SelectItem value="duto">Duto</SelectItem>
                     <SelectItem value="piso-teto">Piso Teto</SelectItem>
                   </SelectContent>
                 </Select>
@@ -316,7 +316,13 @@ export function VRFCondensadoraCalculator() {
                 {evaporators.length > 0 ? evaporators.map((evap, index) => (
                   <tr key={index}>
                     <td className="p-2">{index + 1}</td>
-                    <td className="p-2">{evap.type === 'hi-wall' ? 'Hi Wall' : evap.type === 'cassete' ? 'Cassete' : 'Piso Teto'}</td>
+                    <td className="p-2">{
+                      evap.type === 'hi-wall' ? 'Hi Wall' : 
+                      evap.type === 'cassete-1-via' ? 'Cassete 1 Via' :
+                      evap.type === 'cassete-4-vias' ? 'Cassete 4 Vias' :
+                      evap.type === 'duto' ? 'Duto' :
+                      evap.type === 'piso-teto' ? 'Piso Teto' : evap.type
+                    }</td>
                     <td className="p-2">{evap.nominal}</td>
                     <td className="p-2">{evap.realBTU.toLocaleString()}</td>
                     <td className="p-2">
