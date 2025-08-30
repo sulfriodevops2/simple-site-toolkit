@@ -183,7 +183,8 @@ export function VRFCondensadoraCalculator() {
               <div className="grid grid-cols-3 gap-2">
                 <Select value={params.evaporadora} onValueChange={(value) => {
                   const newEvapMap = EVAPORADORAS_MAP[value as keyof typeof EVAPORADORAS_MAP] || {};
-                  const firstNominal = Object.keys(newEvapMap)[0] || '7';
+                  const availableNominals = Object.keys(newEvapMap);
+                  const firstNominal = availableNominals[0] || '7';
                   setParams(prev => ({ ...prev, evaporadora: value, nominal: firstNominal }));
                 }}>
                   <SelectTrigger>
