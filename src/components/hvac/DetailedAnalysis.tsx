@@ -46,7 +46,7 @@ function parseDetails(details: string): DetailedData | null {
   console.log('Lines found:', lines)
 
   // Regex flexível para modelos
-  const modeloRegex = /^([^\-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*m[aá]x\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([\d.,]+)\s*-\s*([^-\n]+?)\s*-\s*Simultaneidade:\s*([\d,]+)%/i
+  const modeloRegex = /^([^\d]+?)\s*(?:\s*|\b)nominal\s*(\d+)\s*(?:\s*|\b)m[aá]x\s*(\d+)\s*(?:\s*|\b)limite\s*\(([^)]+)\)\s*=\s*([\d.,]+)\s*-\s*([^-\n]+?)\s*-\s*Simultaneidade:\s*([\d,]+)%/i
 
   const modelos = lines
     .filter(line => /nominal\s+\d+/i.test(line) && /Simultaneidade:/i.test(line))
