@@ -69,13 +69,13 @@ export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
     <HVACCard title="Detalhes" className="col-span-full">
       <ScrollArea className="h-48">
         {parsedData ? (
-          <div className="space-y-4">
-            {/* Header Info */}
-            <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="font-mono text-sm">
+            {/* Header Grid */}
+            <div className="grid grid-cols-2 gap-4 mb-2">
               <div>
                 <strong>Entrada normalizada:</strong> [{parsedData.entrada}]
                 {parsedData.tag7 && (
-                  <div className="text-muted-foreground text-xs mt-1">{parsedData.tag7}</div>
+                  <div className="text-muted-foreground mt-1">{parsedData.tag7}</div>
                 )}
               </div>
               <div>
@@ -83,33 +83,36 @@ export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
               </div>
             </div>
             
-            <Separator className="opacity-30" />
+            {/* Spacing */}
+            <div className="h-2"></div>
             
-            {/* Models List */}
-            <div className="space-y-2">
-              {parsedData.modelos.map((modelo, index) => (
-                <div key={index} className="flex justify-between items-center py-2 border-b border-border/20 last:border-b-0">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className={modelo.compativel ? "text-system-green" : "text-system-red"}>
-                      {modelo.compativel ? "✔" : "✖"}
-                    </span>
-                    <span className="font-medium">{modelo.nome}</span>
-                    <span className="px-2 py-1 bg-muted/30 rounded text-xs">nominal {modelo.nominal}</span>
-                    <span className="px-2 py-1 bg-muted/30 rounded text-xs">máx {modelo.max}</span>
-                    <span className="px-2 py-1 bg-muted/30 rounded text-xs">
-                      limite ({modelo.modo}) = {modelo.limite.toString().replace('.', ',')}
-                    </span>
-                  </div>
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    modelo.compativel 
-                      ? "bg-system-green/15 text-system-green border border-system-green/25" 
-                      : "bg-system-red/15 text-system-red border border-system-red/25"
-                  }`}>
-                    {modelo.status} — Simultaneidade: {modelo.simultaneidade.toString().replace('.', ',')}%
-                  </div>
+            {/* Result Lines */}
+            {parsedData.modelos.map((modelo, index) => (
+              <div key={index} className="flex justify-between items-baseline py-2.5 border-b border-dashed border-white/[0.08] last:border-b-0">
+                <div>
+                  <span className={modelo.compativel ? "text-system-green" : "text-system-red"}>
+                    {modelo.compativel ? "✔" : "✖"}
+                  </span>
+                  {" "}{modelo.nome}
+                  <span className="inline-block ml-1.5 px-2 py-1 text-xs bg-white/[0.08] rounded-full text-muted-foreground">
+                    nominal {modelo.nominal}
+                  </span>
+                  <span className="inline-block ml-1.5 px-2 py-1 text-xs bg-white/[0.08] rounded-full text-muted-foreground">
+                    máx {modelo.max}
+                  </span>
+                  <span className="inline-block ml-1.5 px-2 py-1 text-xs bg-white/[0.08] rounded-full text-muted-foreground">
+                    limite ({modelo.modo}) = {modelo.limite.toString().replace('.', ',')}
+                  </span>
                 </div>
-              ))}
-            </div>
+                <div className={`px-2 py-1 text-xs rounded-full ${
+                  modelo.compativel 
+                    ? "bg-system-green/15 text-system-green border border-system-green/25" 
+                    : "bg-system-red/15 text-system-red border border-system-red/25"
+                }`}>
+                  {modelo.status} — Simultaneidade: {modelo.simultaneidade.toString().replace('.', ',')}%
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="flex items-center justify-center h-32 text-muted-foreground">
