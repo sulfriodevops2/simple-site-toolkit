@@ -23,46 +23,45 @@ interface DetailedData {
 
 function parseDetails(details: string): DetailedData | null {
   if (!details) return null
-  
+
   console.log('Parsing details:', details)
-  
+
+  // Normaliza quebras de linha reais
+  const normalizedDetails = details.replace(/\\n/g, '\n')
+
   // Entrada normalizada
-  const entradaMatch = details.match(/Entrada normalizada: \[(.*?)\]/)
+  const entradaMatch = normalizedDetails.match(/Entrada normalizada: \[(.*?)\]/)
   const entrada = entradaMatch?.[1] || ''
-  
+
   // Soma das evaporadoras
-  const somaMatch = details.match(/Soma das evaporadoras: (\d+)/)
+  const somaMatch = normalizedDetails.match(/Soma das evaporadoras: (\d+)/)
   const soma = parseInt(somaMatch?.[1] || '0')
-  
+
   // Tag especial "7 tratado como 9"
-  const tag7Match = details.match(/(7 tratado como 9[^\n]*)/i)
+  const tag7Match = normalizedDetails.match(/(7 tratado como 9[^\n]*)/i)
   const tag7 = tag7Match?.[1] || undefined
-  
-  // Divide por linhas
-  const lines = details.split('\n').filter(line => line.trim())
+
+  // Divide por linhas reais
+  const lines = normalizedDetails.split('\n').filter(line => line.trim())
   console.log('Lines found:', lines)
-  
+
   // Regex flexível para modelos
-  const modeloRegex = /^(.+?)\s*-\s*nominal\s+(\d+)\s*-\s*m[aá]x\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([\d.,]+)\s*-\s*([^-\n]+?)\s*-\s*Simultaneidade:\s*([\d,]+)%/i
-  
+  const modeloRegex = /^([^\-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*m[aá]x\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([\d.,]+)\s*-\s*([^-\n]+?)\s*-\s*Simultaneidade:\s*([\d,]+)%/i
+
   const modelos = lines
-    // Pega linhas que tenham "nominal" e "Simultaneidade"
     .filter(line => /nominal\s+\d+/i.test(line) && /Simultaneidade:/i.test(line))
     .map(line => {
       console.log('Processing line:', line)
-      
       const match = line.match(modeloRegex)
-      
+
       if (match) {
         const [, nome, nominalStr, maxStr, modo, limiteStr, status, simultaneidadeStr] = match
-        
         const nominal = parseInt(nominalStr)
         const max = parseInt(maxStr)
         const limite = parseFloat(limiteStr.replace(',', '.'))
         const simultaneidade = parseFloat(simultaneidadeStr.replace(',', '.'))
-        
         const compativel = /Compat[ií]vel/i.test(status)
-        
+
         const result = { 
           nome: nome.trim(), 
           nominal, 
@@ -76,19 +75,20 @@ function parseDetails(details: string): DetailedData | null {
         console.log('Parsed model:', result)
         return result
       }
-      
+
       return null
     })
     .filter(modelo => modelo !== null && modelo.nome && !isNaN(modelo.nominal) && modelo.nominal > 0) as DetailedData["modelos"]
-  
+
   console.log('Final modelos:', modelos)
   return { entrada, soma, tag7, modelos }
 }
+
 export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
   const parsedData = parseDetails(details || '')
-  
+
   console.log('Parsed data:', parsedData)
-  
+
   return (
     <HVACCard title="Detalhes" className="col-span-full">
       <ScrollArea className="h-48">
@@ -106,9 +106,9 @@ export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
                 <strong>Soma das evaporadoras:</strong> {parsedData.soma}
               </div>
             </div>
-            
+
             <div className="h-2"></div>
-            
+
             {/* Result Lines */}
             {parsedData.modelos.length > 0 ? (
               parsedData.modelos.map((modelo, index) => (
