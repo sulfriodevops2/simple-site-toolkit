@@ -25,30 +25,49 @@ interface DetailedData {
 function parseDetails(details: string): DetailedData | null {
   if (!details) return null
   
-  const lines = details.split('\n')
+  const lines = details.split('\n').filter(line => line.trim())
+  
+  // Parse entrada normalizada
   const entradaLine = lines.find(line => line.includes('Entrada normalizada:'))
+  const entrada = entradaLine?.match(/\[(.*?)\]/)?.[1] || ''
+  
+  // Parse soma
   const somaLine = lines.find(line => line.includes('Soma das evaporadoras:'))
+  const soma = parseInt(somaLine?.split(':')[1]?.trim() || '0')
+  
+  // Parse tag7
   const tag7Line = lines.find(line => line.includes('7 tratado como 9'))
   
-  if (!entradaLine || !somaLine) return null
-  
-  const entrada = entradaLine.split('[')[1]?.split(']')[0] || ''
-  const soma = parseInt(somaLine.split(':')[1]?.trim() || '0')
-  
+  // Parse modelos - procurar linhas que começam com ✔ ou ✖
   const modelos = lines
-    .filter(line => line.includes('✔') || line.includes('✖'))
+    .filter(line => line.startsWith('✔') || line.startsWith('✖'))
     .map(line => {
-      const parts = line.split(' - ')
-      const nome = parts[0]?.replace('✔ ', '').replace('✖ ', '') || ''
-      const nominal = parseInt(parts[1]?.replace('nominal ', '') || '0')
-      const max = parseInt(parts[2]?.replace('máx ', '') || '0')
-      const limiteMatch = parts[3]?.match(/limite \((\w+)\) = ([\d.,]+)/)
+      const compativel = line.startsWith('✔')
+      
+      // Parse nome (LG 18, Daikin 24, etc)
+      const nomeMatch = line.match(/[✔✖]\s+([A-Za-z]+\s+\d+)/)
+      const nome = nomeMatch?.[1] || ''
+      
+      // Parse nominal
+      const nominalMatch = line.match(/nominal\s+(\d+)/)
+      const nominal = parseInt(nominalMatch?.[1] || '0')
+      
+      // Parse máx
+      const maxMatch = line.match(/máx\s+(\d+)/)
+      const max = parseInt(maxMatch?.[1] || '0')
+      
+      // Parse limite
+      const limiteMatch = line.match(/limite\s+\((\w+)\)\s+=\s+([\d.,]+)/)
       const modo = limiteMatch?.[1] || ''
       const limite = parseFloat(limiteMatch?.[2]?.replace(',', '.') || '0')
-      const statusMatch = parts[4]?.match(/(.*?) - Simultaneidade: ([\d,]+)%/)
+      
+      // Parse simultaneidade
+      const simultMatch = line.match(/Simultaneidade:\s+([\d,]+)%/)
+      const simultaneidade = parseFloat(simultMatch?.[1]?.replace(',', '.') || '0')
+      
+      // Parse status
+      const statusMatch = line.match(/(Compatível|Ultrapassa limite|Combinação não listada)/)
       const status = statusMatch?.[1] || ''
-      const simultaneidade = parseFloat(statusMatch?.[2]?.replace(',', '.') || '0')
-      const compativel = line.includes('✔') && status.includes('Compatível')
       
       return { nome, nominal, max, limite, modo, status, simultaneidade, compativel }
     })
@@ -57,7 +76,7 @@ function parseDetails(details: string): DetailedData | null {
   return {
     entrada,
     soma,
-    tag7: tag7Line?.replace(/^.*? - /, ''),
+    tag7: tag7Line?.replace(/.*7 tratado como 9/, '7 tratado como 9'),
     modelos
   }
 }
