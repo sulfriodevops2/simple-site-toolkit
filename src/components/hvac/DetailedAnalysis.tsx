@@ -1,7 +1,5 @@
-
 import { HVACCard } from "@/components/ui/hvac-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 
 interface DetailedAnalysisProps {
   details: string | null
@@ -28,32 +26,32 @@ function parseDetails(details: string): DetailedData | null {
   
   console.log('Parsing details:', details)
   
-  // Extract entrada normalizada
+  // Entrada normalizada
   const entradaMatch = details.match(/Entrada normalizada: \[(.*?)\]/)
   const entrada = entradaMatch?.[1] || ''
   
-  // Extract soma
+  // Soma das evaporadoras
   const somaMatch = details.match(/Soma das evaporadoras: (\d+)/)
   const soma = parseInt(somaMatch?.[1] || '0')
   
-  // Extract tag7 if exists
+  // Tag especial "7 tratado como 9"
   const tag7Match = details.match(/(7 tratado como 9[^\n]*)/i)
   const tag7 = tag7Match?.[1] || undefined
   
-  // Split by newlines properly
+  // Divide por linhas
   const lines = details.split('\n').filter(line => line.trim())
   console.log('Lines found:', lines)
   
-  // Extract models from lines that match the full pattern
+  // Regex flexível para modelos
+  const modeloRegex = /^[✓X]\s*([^-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*máx\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([0-9.,]+)\s*[-–]\s*(Compatível|Combinação não listada)\s*[-–]\s*Simultaneidade:\s*([0-9.,]+)%/i
+  
   const modelos = lines
-    .filter(line => line.trim().match(/^[✔✖]/))
+    .filter(line => line.trim().match(/^[✓X]/)) // aceita ✓ e X
     .map(line => {
       console.log('Processing line:', line)
       
-      const compativel = line.trim().startsWith('✔')
-      
-      // Regex to match: ✔ LG 18 - nominal 18 - máx 24 - limite (corporativo) = 19.8 - Compatível - Simultaneidade: 38,9%
-      const match = line.match(/^[✔✖]\s*([^-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*máx\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([0-9.,]+)\s*-\s*([^-]+?)\s*-\s*Simultaneidade:\s*([0-9,]+)%/i)
+      const compativel = line.trim().startsWith('✓')
+      const match = line.match(modeloRegex)
       
       if (match) {
         const [, nome, nominalStr, maxStr, modo, limiteStr, status, simultaneidadeStr] = match
@@ -79,7 +77,7 @@ function parseDetails(details: string): DetailedData | null {
       
       return null
     })
-    .filter(modelo => modelo !== null && modelo.nome && !isNaN(modelo.nominal) && modelo.nominal > 0)
+    .filter(modelo => modelo !== null && modelo.nome && !isNaN(modelo.nominal) && modelo.nominal > 0) as DetailedData["modelos"]
   
   console.log('Final modelos:', modelos)
   return { entrada, soma, tag7, modelos }
@@ -108,16 +106,18 @@ export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
               </div>
             </div>
             
-            {/* Spacing */}
             <div className="h-2"></div>
             
             {/* Result Lines */}
             {parsedData.modelos.length > 0 ? (
               parsedData.modelos.map((modelo, index) => (
-                <div key={index} className="flex justify-between items-baseline py-2.5 border-b border-dashed border-white/[0.08] last:border-b-0">
+                <div 
+                  key={index} 
+                  className="flex justify-between items-baseline py-2.5 border-b border-dashed border-white/[0.08] last:border-b-0"
+                >
                   <div>
                     <span className={modelo.compativel ? "text-system-green" : "text-system-red"}>
-                      {modelo.compativel ? "✔" : "✖"}
+                      {modelo.compativel ? "✓" : "X"}
                     </span>
                     {" "}{modelo.nome}
                     <span className="inline-block ml-1.5 px-2 py-1 text-xs bg-white/[0.08] rounded-full text-muted-foreground">
@@ -130,11 +130,13 @@ export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
                       limite ({modelo.modo}) = {modelo.limite.toString().replace('.', ',')}
                     </span>
                   </div>
-                  <div className={`px-2 py-1 text-xs rounded-full ${
-                    modelo.compativel 
-                      ? "bg-system-green/15 text-system-green border border-system-green/25" 
-                      : "bg-system-red/15 text-system-red border border-system-red/25"
-                  }`}>
+                  <div 
+                    className={`px-2 py-1 text-xs rounded-full ${
+                      modelo.compativel 
+                        ? "bg-system-green/15 text-system-green border border-system-green/25" 
+                        : "bg-system-red/15 text-system-red border border-system-red/25"
+                    }`}
+                  >
                     {modelo.status} — Simultaneidade: {modelo.simultaneidade.toString().replace('.', ',')}%
                   </div>
                 </div>
