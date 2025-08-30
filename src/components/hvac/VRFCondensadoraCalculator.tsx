@@ -9,31 +9,26 @@ import { StatusChip } from '@/components/ui/status-chip';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Thermometer, Settings } from 'lucide-react';
 import { calcularCondensadoraVRF } from '@/utils/vrf-calculator';
+import { evaporadoras } from '@/utils/evaporadoras';
 
 // Mapa correto das evaporadoras (conforme versão antiga)
-const EVAPORADORAS_MAP = {
-  "hi-wall": {
-    7: 7507,   // Nominal 7 → Real 7.507 BTU/h
-    9: 9000,   
-    12: 12000,
-    18: 18000,
-    24: 24000
-  },
-  "cassete": {
-    7: 7507,
-    9: 9000,
-    12: 12000,
-    18: 18000,
-    24: 24000
-  },
-  "piso-teto": {
-    7: 7507,
-    9: 9000,
-    12: 12000,
-    18: 18000,
-    24: 24000
-  }
-};
+const EVAPORADORAS_MAP = (() => {
+  // Usamos a base de dados nova (Samsung por padrão para compatibilidade)
+  const cat = evaporadoras.samsung;
+  const findTipo = (t: string) => cat.find(e => e.tipo === t)?.modelos || [];
+  const toMap = (arr: ReadonlyArray<{ nominal: number; real: number }>) =>
+    Object.fromEntries(arr.map(m => [m.nominal, m.real]));
+
+  return {
+    "hi-wall": toMap(findTipo("Hi Wall")),
+    // Unifica Cassete 1 Via + Cassete 4 Vias para o seletor atual "cassete"
+    "cassete": toMap([
+      ...findTipo("Cassete 1 Via"),
+      ...findTipo("Cassete 4 Vias"),
+    ]),
+    "piso-teto": toMap(findTipo("Piso Teto")),
+  } as Record<string, Record<number, number>>;
+})();
 
 export function VRFCondensadoraCalculator() {
   const [params, setParams] = useState({
