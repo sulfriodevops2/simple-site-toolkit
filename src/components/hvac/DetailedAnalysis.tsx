@@ -43,14 +43,14 @@ function parseDetails(details: string): DetailedData | null {
   console.log('Lines found:', lines)
   
   // Regex flexível para modelos
-  const modeloRegex = /^[✓X]\s*([^-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*máx\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([0-9.,]+)\s*[-–]\s*(Compatível|Combinação não listada)\s*[-–]\s*Simultaneidade:\s*([0-9.,]+)%/i
+  const modeloRegex = /^(.+?)\s*-\s*nominal\s+(\d+)\s*-\s*m[aá]x\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([\d.,]+)\s*-\s*([^-\n]+?)\s*-\s*Simultaneidade:\s*([\d,]+)%/i
   
   const modelos = lines
-    .filter(line => line.trim().match(/^[✓X]/)) // aceita ✓ e X
+    // Pega linhas que tenham "nominal" e "Simultaneidade"
+    .filter(line => /nominal\s+\d+/i.test(line) && /Simultaneidade:/i.test(line))
     .map(line => {
       console.log('Processing line:', line)
       
-      const compativel = line.trim().startsWith('✓')
       const match = line.match(modeloRegex)
       
       if (match) {
@@ -60,6 +60,8 @@ function parseDetails(details: string): DetailedData | null {
         const max = parseInt(maxStr)
         const limite = parseFloat(limiteStr.replace(',', '.'))
         const simultaneidade = parseFloat(simultaneidadeStr.replace(',', '.'))
+        
+        const compativel = /Compat[ií]vel/i.test(status)
         
         const result = { 
           nome: nome.trim(), 
@@ -82,7 +84,6 @@ function parseDetails(details: string): DetailedData | null {
   console.log('Final modelos:', modelos)
   return { entrada, soma, tag7, modelos }
 }
-
 export function DetailedAnalysis({ details }: DetailedAnalysisProps) {
   const parsedData = parseDetails(details || '')
   
