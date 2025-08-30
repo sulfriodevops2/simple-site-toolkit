@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora Sulfrio</title>
+  <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/site.webmanifest" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --text: #e6edf7;
+      --accent1: #0f114f;
+      --accent2: #1a1d70;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+      background: radial-gradient(1200px 600px at 10% -10%, #12213f 0%, #0b1220 50%) no-repeat, #0b1220;
+      background-attachment: fixed;
+      color: var(--text);
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .container img {
+      max-width: 300px;
+      margin-top: 150px;
+      margin-bottom: 150px;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      border: none;
+      padding: 14px 40px;
+      border-radius: 999px; /* pill style */
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      width: 140px;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, var(--accent2), var(--accent1));
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button onclick="window.location.href='multi.html'">MULTI</button>
+
+    <button onclick="window.location.href='vrf.html'">VRF</button>
+  </div>
+
+  <footer>
+    <img src="assets/logo.png" alt="Minha imagem" style="max-width: 50px;">
+  </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora Multi</title>
+  <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/site.webmanifest" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --muted: #7e8aa1;
+      --text: #e6edf7;
+      --accent: #79c0ff;
+      --good: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 24px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+  background: radial-gradient(1200px 600px at 10% -10%, #12213f 0%, #0b1220 50%) no-repeat,
+            #0b1220;
+background-attachment: fixed;
+  color: var(--text);
+}
+
+footer {
+  background-color: var(--bg);
+  padding: 20px 0;
+}
+
+footer img {
+  display: block;
+  margin: auto;
+}
+
+    h1 { margin: 0 0 12px; font-size: 28px; line-height: 1.1; text-align:center; }
+    p  { margin: 0 0 12px; color: var(--muted); text-align:center; }
+    .app {
+      max-width: 960px; margin: 0 auto; display: grid; gap: 16px;
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 16px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .full { grid-column: 1 / -1; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"] {
+      width: 100%; background: #0d1527; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+      padding: 12px 14px; font-size: 16px; outline: none;
+    }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+    
+    .modes, .brands { display: flex; flex-direction: column; gap: 8px; }
+
+    
+    .mode, .brand {
+      padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer; user-select: none; color: var(--muted);
+      width: fit-content;
+    }
+    .mode input, .brand input { display: none; }
+    .mode.active, .brand.active {
+      border-color: var(--accent); color: var(--text);
+      box-shadow: 0 0 0 2px rgba(121,192,255,0.2) inset;
+    }
+
+    button {
+      padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(180deg, #184a78, #103659);
+      color: white; font-weight: 600; cursor: pointer;
+    }
+    button.secondary { background: #0f1b33; }
+    pre, code { white-space: pre-wrap; word-wrap: break-word; }
+
+    .result-line { display: flex; gap: 12px; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+    .result-line:last-child { border-bottom: none; }
+    .tag { font-size: 12px; padding: 4px 8px; background: rgba(255,255,255,0.08); border-radius: 999px; color: var(--muted); }
+    .chip { font-size: 12px; padding: 4px 8px; border-radius: 999px; }
+    .ok { background: rgba(63,185,80,0.15); color: var(--good); border: 1px solid rgba(63,185,80,0.25); }
+    .no { background: rgba(248,81,73,0.15); color: var(--bad); border: 1px solid rgba(248,81,73,0.25); }
+    .warn { background: rgba(210,153,34,0.15); color: var(--warn); border: 1px solid rgba(210,153,34,0.25); }
+    .muted { color: var(--muted); }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Condensadoras Multi</h1>
+  <p style="color: #0b1220;">A glória é de Deus</p>
+
+  <div class="app">
+    <div class="card">
+      <label for="evaps">Evaporadoras</label>
+      <input id="evaps" type="text" placeholder="Ex.: 7,7,12,24" />
+      <div class="hint">Aceita 1 a 5 itens. Valores válidos: 7, 9, 12, 18, 24.</div>
+
+      <div style="height: 12px"></div>
+
+      
+      <div class="grid">
+        <div>
+          <label>Modo de simultaneidade</label>
+          <div id="modes" class="modes">
+            <label class="mode active"><input type="radio" name="modo" value="residencial" checked>Residencial (até 140%)</label>
+            <label class="mode"><input type="radio" name="modo" value="corporativo">Corporativo (até 110%)</label>
+            <label class="mode"><input type="radio" name="modo" value="maximo">Capacidade Máxima</label>
+          </div>
+        </div>
+
+        <div>
+          <label>Marca</label>
+<div id="brands" class="brands">
+  <label class="brand active"><input type="radio" name="marca" value="todas" checked>Todas as marcas</label>
+  <div style="display: flex; gap: 8px;">
+    <label class="brand"><input type="radio" name="marca" value="lg">LG</label>
+    <label class="brand"><input type="radio" name="marca" value="daikin">Daikin</label>
+  </div>
+  <label class="brand"><input type="radio" name="marca" value="samsung">Samsung</label>
+</div>
+        </div>
+      </div>
+
+      <div style="height: 12px"></div>
+
+      <div class="row">
+        <button id="btnVer">Verificar</button>
+        <button id="btnLimpar" class="secondary">Limpar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Resultado</label>
+      <div id="resultado" class="mono" style="min-height: 120px;">
+        <span class="muted">— Sem resultados ainda —</span>
+      </div>
+    </div>
+
+    <div class="card full">
+      <label>Detalhes</label>
+      <div id="detalhes" class="mono"><span class="muted">Quando você buscar, os cálculos e limites aparecem aqui.</span></div>
+    </div>
+  </div>
+
+  <script>
+    const norm = arr => [...arr].sort((a,b)=>a-b).join(',');
+    const soma = arr => arr.reduce((t,n)=>t+n,0);
+
+    function capEfetiva(modelo, modo) {
+      const { capNominal, capMax } = modelo;
+      if (modo === 'residencial') return Math.min(capNominal * 1.4, capMax);
+      if (modo === 'corporativo') return Math.min(capNominal * 1.1, capMax);
+      return capMax;
+    }
+
+    function porcento(v) { return (Math.round(v * 10) / 10).toString().replace('.', ','); }
+
+    function parseEntrada(txt) {
+      if (!txt || !txt.trim()) return [];
+      return txt.split(',')
+        .map(x => parseInt(x.trim(), 10))
+        .filter(x => [7,9,12,18,24].includes(x))
+        .slice(0, 5);
+    }
+
+    function criarModeloDaikin(nome, capNominal, capMax, lista) {
+      return {
+        nome,
+        modelo: nome.split(' ')[1],
+        capNominal,
+        capMax,
+        combinacoes: new Set(lista.map(v => norm(v)))
+      };
+    }
+
+    const DAIKIN_18_BI = criarModeloDaikin('Daikin 18 Bi', 18, 24, [
+      [9, 9],
+      [9, 12],
+      [12, 12]
+    ]);
+
+    const DAIKIN_18_TRI = criarModeloDaikin('Daikin 18 Tri', 18, 30, [
+      [9, 9],
+      [9, 12],
+      [9, 18],
+      [12, 12],
+      [12, 18],
+      [9, 9, 9],
+      [9, 9, 12]
+    ]);
+
+    const DAIKIN_24 = criarModeloDaikin('Daikin 24', 24, 38, [
+      [9, 9], [9, 12], [9, 18],
+      [12, 12], [12, 18], [9, 9, 9], [9, 9, 12],
+      [9, 20], [12, 20], [18, 18], [18, 20],
+      [9, 9, 18], [9, 9, 20], [9, 12, 12], [9, 12, 18], [12, 12, 12]
+    ]);
+
+    const DAIKIN_28 = criarModeloDaikin('Daikin 28', 28, 45, [
+      [9, 9], [9, 12], [9, 18],
+      [12, 12], [12, 18], [9, 9, 9], [9, 9, 12],
+      [9, 20], [12, 20], [18, 18], [18, 20],
+      [9, 9, 18], [9, 9, 20], [9, 12, 12], [9, 12, 18], [12, 12, 12],
+      [9, 24], [12, 24], [18, 24], [20, 20], [20, 24],
+      [9, 9, 24], [9, 12, 20], [9, 12, 24], [9, 18, 18], [9, 18, 20], [9, 20, 20],
+      [12, 12, 18], [12, 12, 20], [12, 12, 24], [12, 18, 18], [12, 18, 20],
+      [9, 9, 9, 9], [9, 9, 9, 12], [9, 9, 9, 18], [9, 9, 9, 20],
+      [9, 9, 12, 12], [9, 9, 12, 18], [9, 9, 12, 20],
+      [9, 12, 12, 12], [9, 12, 12, 18], [12, 12, 12, 12]
+    ]);
+
+    const DAIKIN_34 = criarModeloDaikin('Daikin 34', 34, 54, [
+      [9, 9], [9, 12], [9, 18],
+      [12, 12], [12, 18], [9, 9, 9], [9, 9, 12],
+      [9, 20], [12, 20], [18, 18], [18, 20],
+      [9, 9, 18], [9, 9, 20], [9, 12, 12], [9, 12, 18], [12, 12, 12],
+      [9, 24], [12, 24], [18, 24], [20, 20], [20, 24],
+      [9, 9, 24], [9, 12, 20], [9, 12, 24], [9, 18, 18], [9, 18, 20], [9, 20, 20],
+      [12, 12, 18], [12, 12, 20], [12, 12, 24], [12, 18, 18], [12, 18, 20],
+      [9, 9, 9, 9], [9, 9, 9, 12], [9, 9, 9, 18], [9, 9, 9, 20],
+      [9, 9, 12, 12], [9, 9, 12, 18], [9, 9, 12, 20],
+      [9, 12, 12, 12], [9, 12, 12, 18], [12, 12, 12, 12],
+      [9, 18, 24], [9, 20, 24], [12, 18, 24], [12, 20, 20], [18, 18, 18],
+      [9, 9, 9, 24], [9, 9, 12, 24], [9, 9, 18, 18], [9, 12, 12, 20], [12, 12, 12, 18]
+    ]);
+
+    const DAIKIN_38 = criarModeloDaikin('Daikin 38', 38, 60, [
+      [9, 9], [9, 12], [9, 18],
+      [12, 12], [12, 18], [9, 9, 9], [9, 9, 12],
+      [9, 20], [12, 20], [18, 18], [18, 20],
+      [9, 9, 18], [9, 9, 20], [9, 12, 12], [9, 12, 18], [12, 12, 12],
+      [9, 24], [12, 24], [18, 24], [20, 20], [20, 24],
+      [9, 9, 24], [9, 12, 20], [9, 12, 24], [9, 18, 18], [9, 18, 20], [9, 20, 20],
+      [12, 12, 18], [12, 12, 20], [12, 12, 24], [12, 18, 18], [12, 18, 20],
+      [9, 9, 9, 9], [9, 9, 9, 12], [9, 9, 9, 18], [9, 9, 9, 20],
+      [9, 9, 12, 12], [9, 9, 12, 18], [9, 9, 12, 20],
+      [9, 12, 12, 12], [9, 12, 12, 18], [12, 12, 12, 12],
+      [9, 18, 24], [9, 20, 24], [12, 18, 24], [12, 20, 20], [18, 18, 18],
+      [9, 9, 9, 24], [9, 9, 12, 24], [9, 9, 18, 18], [9, 12, 12, 20], [12, 12, 12, 18],
+      [24, 24],
+      [9, 9, 9, 9, 9], [9, 9, 9, 9, 12], [9, 9, 9, 9, 18], [9, 9, 9, 12, 12], [9, 9, 12, 12, 12]
+    ]);
+
+    const DAIKIN_MODELOS = [
+      DAIKIN_18_BI, DAIKIN_18_TRI, DAIKIN_24, DAIKIN_28, DAIKIN_34, DAIKIN_38
+    ];
+
+    const LG_MODELOS_INFO = [
+      { nome: 'LG 18', capNominal: 18, capMax: 24, maxEvaps: 2 },
+      { nome: 'LG 21', capNominal: 21, capMax: 30, maxEvaps: 3 },
+      { nome: 'LG 24', capNominal: 24, capMax: 36, maxEvaps: 3 },
+      { nome: 'LG 30', capNominal: 30, capMax: 51, maxEvaps: 4 },
+      { nome: 'LG 36', capNominal: 36, capMax: 54, maxEvaps: 5 },
+      { nome: 'LG 48', capNominal: 48, capMax: 72, maxEvaps: 5 },
+    ];
+    const LG_EVAPS = [7, 9, 12, 18, 24];
+
+    function gerarCombinacoesLG(capMax, maxEvaps) {
+      let res = new Set();
+      function comb(atual) {
+        const somaAtual = soma(atual);
+        if (atual.length > 0 && somaAtual <= capMax && atual.length <= maxEvaps) {
+          res.add(norm(atual));
+        }
+        if (atual.length >= maxEvaps) return;
+        for (let cap of LG_EVAPS) {
+          if (somaAtual + cap <= capMax) {
+            comb([...atual, cap].sort((a,b) => a-b));
+          }
+        }
+      }
+      comb([]);
+      return res;
+    }
+
+    const LG_MODELOS = LG_MODELOS_INFO.map(info => ({
+      nome: info.nome,
+      modelo: info.nome.split(' ')[1],
+      capNominal: info.capNominal,
+      capMax: info.capMax,
+      combinacoes: gerarCombinacoesLG(info.capMax, info.maxEvaps)
+    }));
+
+    const SAMSUNG_18 = {
+      nome: 'Samsung 18',
+      modelo: '18',
+      capNominal: 18,
+      capMax: 30,
+      combinacoes: new Set([
+        norm([7,7]), norm([7,9]), norm([7,12]), norm([7,18]),
+        norm([9,9]), norm([9,12]), norm([9,18]),
+        norm([12,12]), norm([12,18]),
+      ])
+    };
+
+    const SAMSUNG_24 = {
+      nome: 'Samsung 24',
+      modelo: '24',
+      capNominal: 24,
+      capMax: 39,
+      combinacoes: new Set([
+        norm([7,7]), norm([7,9]), norm([7,12]), norm([7,18]),
+        norm([9,9]), norm([9,12]), norm([9,18]),
+        norm([12,12]), norm([12,18]), norm([18,18]),
+        norm([7,7,7]), norm([7,7,9]), norm([7,7,12]), norm([7,7,18]),
+        norm([7,9,9]), norm([7,9,12]), norm([7,9,18]),
+        norm([7,12,12]), norm([7,12,18]),
+        norm([9,9,9]), norm([9,9,12]), norm([9,9,18]),
+        norm([9,12,12]), norm([9,12,18]),
+        norm([12,12,12]),
+      ])
+    };
+
+    const SAMSUNG_28 = {
+      nome: 'Samsung 28',
+      modelo: '28',
+      capNominal: 28,
+      capMax: 48,
+      combinacoes: new Set([
+        norm([7,7]), norm([7,9]), norm([7,12]), norm([7,18]), norm([7,24]),
+        norm([9,9]), norm([9,12]), norm([9,18]), norm([9,24]),
+        norm([12,12]), norm([12,18]), norm([12,24]),
+        norm([18,18]), norm([18,24]),
+        norm([7,7,7]), norm([7,7,9]), norm([7,7,12]), norm([7,7,18]), norm([7,7,24]),
+        norm([7,9,9]), norm([7,9,12]), norm([7,9,18]), norm([7,9,24]),
+        norm([7,12,12]), norm([7,12,18]), norm([7,18,18]),
+        norm([9,9,9]), norm([9,9,12]), norm([9,9,18]), norm([9,9,24]),
+        norm([9,12,12]), norm([9,12,18]),
+        norm([12,12,12]), norm([12,12,18]),
+        norm([7,7,7,7]), norm([7,7,7,9]), norm([7,7,7,12]), norm([7,7,7,18]),
+        norm([7,7,9,9]), norm([7,7,9,12]), norm([7,7,9,18]), norm([7,7,12,12]),
+        norm([7,9,9,9]), norm([7,9,9,12]), norm([7,9,9,18]), norm([7,9,12,12]),
+        norm([9,9,9,9]), norm([9,9,9,12]), norm([9,9,12,12]),
+        norm([12,12,12,12]), norm([9,9,12,18]),
+      ])
+    };
+
+    const combinacoesCondensadora34 = [
+      [7,7],[7,9],[7,12],[7,18],[7,24],[9,9],[9,12],[9,18],[9,24],
+      [12,12],[12,18],[12,24],[18,18],[18,24],[24,24],
+      [7,7,7],[7,7,9],[7,7,12],[7,7,18],[7,7,24],[7,9,9],[7,9,12],[7,9,18],[7,9,24],
+      [7,12,12],[7,12,18],[7,12,24],[7,18,18],[7,18,24],[7,24,24],
+      [9,9,9],[9,9,12],[9,9,18],[9,9,24],[9,12,12],[9,12,18],[9,12,24],
+      [9,18,18],[9,18,24],[9,24,24],[12,12,12],[12,12,18],[12,12,24],
+      [12,18,18],[12,18,24],[12,24,24],[18,18,18],[18,18,24],
+      [7,7,7,7],[7,7,7,9],[7,7,7,12],[7,7,7,18],[7,7,7,24],
+      [7,7,9,9],[7,7,9,12],[7,7,9,18],[7,7,9,24],
+      [7,7,12,12],[7,7,12,18],[7,7,12,24],[7,7,18,18],[7,7,18,24],
+      [7,9,9,9],[7,9,9,12],[7,9,9,18],[7,9,9,24],[7,9,12,12],[7,9,12,18],[7,9,12,24],
+      [7,9,18,18],[7,9,18,24],[7,12,12,12],[7,12,12,18],[7,12,12,24],[7,12,18,18],[7,12,18,24],[7,18,18,18],
+      [9,9,9,9],[9,9,9,12],[9,9,9,18],[9,9,9,24],[9,9,12,12],[9,9,12,18],[9,9,12,24],[9,9,18,18],[9,9,18,24],
+      [9,12,12,12],[9,12,12,18],[9,12,12,24],[9,12,18,18],
+      [12,12,12,12],[12,12,12,18],[12,12,12,24],[12,12,18,18],
+      [7,7,7,7,7],[7,7,7,7,9],[7,7,7,7,12],[7,7,7,7,18],[7,7,7,7,24],
+      [7,7,7,9,9],[7,7,7,9,12],[7,7,7,9,18],[7,7,7,9,24],
+      [7,7,7,12,12],[7,7,7,12,18],[7,7,7,12,24],[7,7,7,18,18],
+      [7,7,9,9,9],[7,7,9,9,12],[7,7,9,9,18],[7,7,9,9,24],
+      [7,7,9,12,12],[7,7,9,12,18],[7,7,9,12,24],[7,7,9,18,18],
+      [7,7,12,12,12],[7,7,12,12,18],[7,9,9,9,9],[7,9,9,9,12],[7,9,9,9,18],[7,9,9,9,24],
+      [7,9,9,12,12],[7,9,9,12,18],[7,9,9,12,24],[7,9,9,18,18],
+      [7,9,12,12,12],[7,9,12,12,18],[7,12,12,12,12],
+      [9,9,9,9,9],[9,9,9,9,12],[9,9,9,9,18],[9,9,9,9,24],[9,9,9,12,12],[9,9,9,12,18],
+      [9,9,12,12,12],[9,9,12,12,18],[9,12,12,12,12],
+    ];
+
+    const SAMSUNG_34 = {
+      nome: 'Samsung 34',
+      modelo: '34',
+      capNominal: 34,
+      capMax: 60,
+      combinacoes: new Set(combinacoesCondensadora34.map(v => norm(v)))
+    };
+
+    const combinacoesCondensadora48 = [
+      [7,7],[7,9],[7,12],[7,18],[7,24],[9,9],[9,12],[9,18],[9,24],
+      [12,12],[12,18],[12,24],[18,18],[18,24],[24,24],
+      [7,7,7],[7,7,9],[7,7,12],[7,7,18],[7,7,24],[7,9,9],[7,9,12],[7,9,18],[7,9,24],
+      [7,12,12],[7,12,18],[7,12,24],[7,18,18],[7,18,24],[7,24,24],
+      [9,9,9],[9,9,12],[9,9,18],[9,9,24],[9,12,12],[9,12,18],[9,12,24],
+      [9,18,18],[9,18,24],[9,24,24],[12,12,12],[12,12,18],[12,12,24],
+      [12,18,18],[12,18,24],[12,24,24],[18,18,18],[18,18,24],
+      [7,7,7,7],[7,7,7,9],[7,7,7,12],[7,7,7,18],[7,7,7,24],
+      [7,7,9,9],[7,7,9,12],[7,7,9,18],[7,7,9,24],
+      [7,7,12,12],[7,7,12,18],[7,7,12,24],[7,7,18,18],[7,7,18,24],
+      [7,9,9,9],[7,9,9,12],[7,9,9,18],[7,9,9,24],[7,9,12,12],[7,9,12,18],[7,9,12,24],
+      [7,9,18,18],[7,9,18,24],[7,12,12,12],[7,12,12,18],[7,12,12,24],[7,12,18,18],[7,12,18,24],[7,18,18,18],
+      [9,9,9,9],[9,9,9,12],[9,9,9,18],[9,9,9,24],[9,9,12,12],[9,9,12,18],[9,9,12,24],[9,9,18,18],[9,9,18,24],
+      [9,12,12,12],[9,12,12,18],[9,12,12,24],[9,12,18,18],[9,18,18,18],
+      [12,12,12,12],[12,12,12,18],[12,12,12,24],[12,12,18,18],
+      [7,7,7,7,7],[7,7,7,7,9],[7,7,7,7,12],[7,7,7,7,18],[7,7,7,7,24],
+      [7,7,7,9,9],[7,7,7,9,12],[7,7,7,9,18],[7,7,7,9,24],
+      [7,7,7,12,12],[7,7,7,12,18],[7,7,7,12,24],[7,7,7,18,18],
+      [7,7,9,9,9],[7,7,9,9,12],[7,7,9,9,18],[7,7,9,9,24],
+      [7,7,9,12,12],[7,7,9,12,18],[7,7,9,12,24],[7,7,9,18,18],
+      [7,7,12,12,12],[7,7,12,12,18],[7,7,12,18,18],
+      [7,9,9,9,9],[7,9,9,9,12],[7,9,9,9,18],[7,9,9,9,24],
+      [7,9,9,12,12],[7,9,9,12,18],[7,9,9,12,24],[7,9,9,18,18],
+      [7,9,12,12,12],[7,9,12,12,18],[7,12,12,12,12],
+      [9,9,9,9,9],[9,9,9,9,12],[9,9,9,9,18],[9,9,9,9,24],[9,9,9,12,12],[9,9,9,12,18],[9,9,9,18,18],
+      [9,9,12,12,12],[9,9,12,12,18],[9,12,12,12,12],[12,12,12,12,12],[9,12,12,12,12],[12,12,12,12,12],
+    ];
+
+    const SAMSUNG_48 = {
+      nome: 'Samsung 48',
+      modelo: '48',
+      capNominal: 48,
+      capMax: 69,
+      combinacoes: new Set(combinacoesCondensadora48.map(v => norm(v)))
+    };
+
+    let MODELOS = [
+      SAMSUNG_18, SAMSUNG_24, SAMSUNG_28, SAMSUNG_34, SAMSUNG_48,
+      ...LG_MODELOS,
+      ...DAIKIN_MODELOS
+    ];
+
+    function isDaikin(modelo) {
+      return modelo.nome.toLowerCase().startsWith('daikin');
+    }
+
+    function keyParaModelo(modelo, entrada) {
+      const arr = isDaikin(modelo) ? entrada.map(v => v === 7 ? 9 : v) : entrada;
+      return norm(arr);
+    }
+
+    function verificar() {
+      const entradaOriginal = parseEntrada(document.getElementById('evaps').value);
+      const res = document.getElementById('resultado');
+      const det = document.getElementById('detalhes');
+
+      if (entradaOriginal.length === 0) {
+        res.innerHTML = `<span class="muted">Informe ao menos uma evaporadora (7, 9, 12, 18, 24).</span>`;
+        det.innerHTML = `<span class="muted">—</span>`;
+        return;
+      }
+
+      const total = soma(entradaOriginal);
+      const modo = document.querySelector('input[name="modo"]:checked').value;
+      const marcaSelecionada = document.querySelector('input[name="marca"]:checked').value;
+
+      let tag7 = '';
+      if (entradaOriginal.includes(7)) {
+        if (marcaSelecionada === 'daikin') tag7 = ' - 7 tratado como 9';
+        else if (marcaSelecionada === 'todas') tag7 = ' - 7 tratado como 9 para Daikin';
+      }
+
+      const resultados = MODELOS.map(m => {
+        const keyModelo = keyParaModelo(m, entradaOriginal);
+        const existeNaTabela = m.combinacoes.has(keyModelo);
+        const limite = capEfetiva(m, modo);
+        const ocupa = total / limite * 100;
+        const cabeNoLimite = total <= limite + 1e-9;
+        return { modelo: m, existeNaTabela, limite, cabeNoLimite, ocupa };
+      });
+
+      const compativeis = resultados.filter(r => r.existeNaTabela && r.cabeNoLimite);
+      let htmlResultado = "";
+
+      if (marcaSelecionada === "todas") {
+        const marcas = [...new Set(MODELOS.map(m => m.nome.split(' ')[0]))];
+        marcas.forEach(marca => {
+          const melhor = compativeis
+            .filter(r => r.modelo.nome.toLowerCase().startsWith(marca.toLowerCase()))
+            .sort((a, b) => a.modelo.capNominal - b.modelo.capNominal)[0];
+
+          if (melhor) {
+            htmlResultado += `
+              <div class="result-line">
+                <div>
+                  <strong>${marca} ideal:</strong> ${melhor.modelo.nome}
+                  <span class="tag">nominal ${melhor.modelo.capNominal}</span>
+                  <span class="tag">máx ${melhor.modelo.capMax}</span>
+                </div>
+                <div class="chip ok">Simultaneidade: ${porcento((total / melhor.modelo.capNominal) * 100)}%</div>
+              </div>
+            `;
+          } else {
+            htmlResultado += `
+              <div class="result-line">
+                <div><strong>${marca}:</strong> Nenhuma condensadora compatível</div>
+                <div class="chip no">Incompatível</div>
+              </div>
+            `;
+          }
+        });
+      } else {
+        const melhor = compativeis
+          .filter(r => r.modelo.nome.toLowerCase().startsWith(marcaSelecionada.toLowerCase()))
+          .sort((a, b) => a.modelo.capNominal - b.modelo.capNominal)[0];
+
+        if (melhor) {
+          htmlResultado += `
+            <div class="result-line">
+              <div>
+                <strong>Condensadora ideal:</strong> ${melhor.modelo.nome}
+                <span class="tag">nominal ${melhor.modelo.capNominal}</span>
+                <span class="tag">máx ${melhor.modelo.capMax}</span>
+              </div>
+              <div class="chip ok">Simultaneidade: ${porcento((total / melhor.modelo.capNominal) * 100)}%</div>
+            </div>
+          `;
+        } else {
+          htmlResultado += `
+            <div class="result-line">
+              <div><strong>Nenhuma condensadora é compatível</strong></div>
+              <div class="chip no">Incompatível</div>
+            </div>
+          `;
+        }
+      }
+
+      res.innerHTML = htmlResultado;
+
+      const linhas = resultados
+  .filter(r => {
+    if (marcaSelecionada === "todas") return true;
+    return r.modelo.nome.toLowerCase().startsWith(marcaSelecionada.toLowerCase());
+  })
+  .map(r => {
+    const mark = r.existeNaTabela ? '✔' : '✖';
+    const classe = r.existeNaTabela ? (r.cabeNoLimite ? 'ok' : 'warn') : 'no';
+    const label = r.existeNaTabela ? (r.cabeNoLimite ? 'Compatível' : 'Ultrapassa limite') : 'Combinação não listada';
+    const simult = (total / r.modelo.capNominal) * 100;
+    return `
+      <div class="result-line">
+        <div>
+          ${mark} ${r.modelo.nome}
+          <span class="tag">nominal ${r.modelo.capNominal}</span>
+          <span class="tag">máx ${r.modelo.capMax}</span>
+          <span class="tag">limite (${modo}) = ${r.limite}</span>
+        </div>
+        <div class="chip ${classe}">${label} — Simultaneidade: ${porcento(simult)}%</div>
+      </div>
+    `;
+  })
+  .join('');
+
+  det.innerHTML = `
+  <div class="grid">
+    <div>
+      <strong>Entrada normalizada:</strong> [${entradaOriginal.slice().sort((a, b) => a - b).join(', ')}]
+      ${tag7 ? `<div class="muted">${tag7.replace(/^ - /, '')}</div>` : ''}
+    </div>
+    <div><strong>Soma das evaporadoras:</strong> ${total}</div>
+  </div>
+        <div style="height:8px"></div>
+        ${linhas}
+      `;
+    }
+
+    document.getElementById('btnVer').addEventListener('click', verificar);
+    document.getElementById('btnLimpar').addEventListener('click', () => {
+      document.getElementById('evaps').value = '';
+      document.getElementById('resultado').innerHTML = `<span class="muted">— Sem resultados ainda —</span>`;
+      document.getElementById('detalhes').innerHTML = `<span class="muted">Quando você buscar, os cálculos e limites aparecem aqui.</span>`;
+    });
+
+    document.querySelectorAll('#modes .mode').forEach(lbl => {
+      lbl.addEventListener('click', () => {
+        document.querySelectorAll('#modes .mode').forEach(x => x.classList.remove('active'));
+        lbl.classList.add('active');
+        lbl.querySelector('input').checked = true;
+      });
+    });
+    document.querySelectorAll('#brands .brand').forEach(lbl => {
+      lbl.addEventListener('click', () => {
+        document.querySelectorAll('#brands .brand').forEach(x => x.classList.remove('active'));
+        lbl.classList.add('active');
+        lbl.querySelector('input').checked = true;
+      });
+    });
+  </script>
+<footer style="text-align:center; margin-top: 20px;">
+  <img src="assets/logo.png" alt="Minha imagem" style="max-width: 50px;">
+</footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculadora VRF</title>
+  <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/site.webmanifest" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --muted: #7e8aa1;
+      --text: #e6edf7;
+      --accent: #79c0ff;
+      --good: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      display: flex; flex-direction: column;
+      margin: 0; padding: 24px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+      background: radial-gradient(1200px 600px at 10% -10%, #12213f 0%, #0b1220 50%) no-repeat, #0b1220;
+      background-attachment: fixed;
+      color: var(--text);
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.1; text-align:center; }
+    p  { margin: 0 0 12px; color: var(--muted); text-align:center; }
+
+    .app { max-width: 1080px; margin: 0 auto; display: grid; gap: 16px; grid-template-columns: 1.2fr 1fr; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; box-shadow: 0 6px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05); }
+    .full { grid-column: 1 / -1; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    select {
+      width: 100%; background: #0d1527; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+      padding: 10px 12px; font-size: 16px; outline: none;
+    }
+    .row { display: flex; gap: 8px; flex-wrap: nowrap; align-items: center; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+    @media (max-width: 940px) { .app { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr; } .row { flex-wrap: wrap; } }
+
+    .pill-group { display:flex; gap:8px; flex-wrap:wrap; }
+    .pill { padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.14); cursor:pointer; color: var(--muted); user-select:none; }
+    .pill input { display:none; }
+    .pill.active { border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 2px rgba(121,192,255,0.2) inset; }
+
+    button { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.14); background: linear-gradient(180deg, #184a78, #103659); color: white; font-weight: 600; cursor: pointer; font-size: 14px; }
+    button.secondary { background: #0f1b33; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px 10px; border-bottom: 1px dashed rgba(255,255,255,0.08); text-align:left; }
+    th { color: var(--muted); font-weight: 600; }
+
+    .tag { font-size: 12px; padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 999px; color: var(--muted); margin-left: 6px; }
+    .chip { font-size: 12px; padding: 4px 8px; border-radius: 999px; display:inline-block; }
+    .ok { background: rgba(63,185,80,0.15); color: var(--good); border: 1px solid rgba(63,185,80,0.25); }
+    .no { background: rgba(248,81,73,0.15); color: var(--bad); border: 1px solid rgba(248,81,73,0.25); }
+    .warn { background: rgba(210,153,34,0.12); color: var(--warn); border: 1px solid rgba(210,153,34,0.22); padding:8px; border-radius:8px; }
+    .muted { color: var(--muted); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+    #codigoEvap {
+      width: 100%; background: #0d1527; color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+      padding: 10px 12px; font-size: 16px; outline: none;
+      transition: border-color 0.14s, box-shadow 0.14s;
+    }
+    #codigoEvap.ok { border-color: rgba(63,185,80,0.9); box-shadow: 0 0 0 3px rgba(63,185,80,0.08) inset; }
+    #codigoEvap.err { border-color: rgba(248,81,73,0.9); box-shadow: 0 0 0 3px rgba(248,81,73,0.06) inset; }
+
+    .row-ignored { color: var(--bad); }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Condensadoras VRF</h1>
+  <p style="color: #0b1220;">A glória é de Deus</p>
+
+  <div class="app">
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label>Simultaneidade</label>
+          <div id="simuls" class="pill-group">
+            <label class="pill"><input type="radio" name="simul" value="1.10">Corporativo (110%)</label>
+            <label class="pill active"><input type="radio" name="simul" value="1.30" checked>Limite Padrão (130%)</label>
+            <label class="pill"><input type="radio" name="simul" value="1.45">Limite Residencial (145%)</label>
+          </div>
+          <div id="simulWarning" class="warn" style="display:none; margin-top:8px;">Limite Residencial permitido apenas para Condensadoras Horizontais</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div>
+            <label>Tipo de Condensadora</label>
+            <div id="orientacoes" class="pill-group">
+              <label class="pill active"><input type="radio" name="orientacao" value="Vertical" checked>Vertical</label>
+              <label class="pill"><input type="radio" name="orientacao" value="Horizontal">Horizontal</label>
+            </div>
+          </div>
+
+          <div>
+            <label>Modo de Adição</label>
+            <div id="modoAdd" class="pill-group" style="margin-bottom:0;">
+              <label class="pill active"><input type="radio" name="modoAdd" value="selecionar" checked>Selecionar</label>
+              <label class="pill"><input type="radio" name="modoAdd" value="codigo">Por Código</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <label style="margin-top:10px;">Selecionar Evaporadora</label>
+      <div id="uiSelecionar" class="row">
+        <div style="flex:1; min-width: 180px;">
+          <select id="tipoEvap"></select>
+        </div>
+        <div style="flex:1; min-width: 180px;">
+          <select id="modeloEvap"></select>
+        </div>
+        <button id="btnAdd">Adicionar</button>
+        <button id="btnLimpar" class="secondary">Limpar</button>
+      </div>
+
+      <div id="uiCodigo" style="display:none; margin-top: 12px;">
+        <div class="row">
+          <input type="text" id="codigoEvap" placeholder="Ex: VEWS12 ou FXAQ20">
+          <button id="btnAddCodigo">Adicionar</button>
+        </div>
+        <div class="muted" style="margin-top:6px">Digite o código e pressione Enter.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+        <label style="margin:0;">Resultado</label>
+        <div id="marcas" class="pill-group">
+          <label class="pill active"><input type="radio" name="marca" value="Samsung" checked>Samsung</label>
+          <label class="pill"><input type="radio" name="marca" value="Daikin">Daikin</label>
+        </div>
+      </div>
+      <div id="resultado" class="mono" style="min-height: 170px; margin-top:8px;">
+        <span class="muted">— Sem resultados ainda —</span>
+      </div>
+    </div>
+
+    <div class="card full">
+      <label>Detalhes</label>
+      <div id="modoLista" class="pill-group" style="margin-bottom:10px;">
+        <label class="pill"><input type="radio" name="modo" value="unidades">Por unidade</label>
+        <label class="pill active"><input type="radio" name="modo" value="agrupado" checked>Agrupado</label>
+      </div>
+      <div id="detalhes" class="mono"><span class="muted">Quando você adicionar evaporadoras, os cálculos e limites aparecem aqui.</span></div>
+    </div>
+  </div>
+
+  <script>
+    const EVAPS_SAMSUNG = {
+      'Hi Wall': [
+        { nominal: 5, real: 5118, code: 'VEWS5' },
+        { nominal: 7, real: 7507, code: 'VEWS7' },
+        { nominal: 9, real: 9554, code: 'VEWS9' },
+        { nominal: 12, real: 12284, code: 'VEWS12' },
+        { nominal: 15, real: 15355, code: 'VEWS15' },
+        { nominal: 18, real: 19108, code: 'VEWS18' },
+        { nominal: 24, real: 23203, code: 'VEWS24' },
+        { nominal: 28, real: 27980, code: 'VEWS28' },
+      ],
+      '1 Via': [
+        { nominal: 7, real: 7507, code: 'VEC1S7' },
+        { nominal: 9, real: 9554, code: 'VEC1S9' },
+        { nominal: 12, real: 12284, code: 'VEC1S12' },
+        { nominal: 18, real: 18000, code: 'VEC1S18' },
+        { nominal: 24, real: 24000, code: 'VEC1S24' },
+      ],
+      '4 Vias': [
+        { nominal: 9, real: 9000, code: 'VEC4S9' },
+        { nominal: 12, real: 12000, code: 'VEC4S12' },
+        { nominal: 18, real: 18000, code: 'VEC4S18' },
+        { nominal: 24, real: 24000, code: 'VEC4S24' },
+        { nominal: 30, real: 30000, code: 'VEC4S30' },
+        { nominal: 36, real: 36000, code: 'VEC4S36' },
+        { nominal: 48, real: 48000, code: 'VEC4S48' },
+        { nominal: 58, real: 58006, code: 'VEC4S58' },
+      ],
+      'Duto': [
+        { nominal: 12, real: 12284, code: 'VEDAS12' },
+        { nominal: 18, real: 19108, code: 'VEDAS18' },
+        { nominal: 24, real: 24226, code: 'VEDAS24' },
+        { nominal: 30, real: 30709, code: 'VEDAS30' },
+        { nominal: 36, real: 38216, code: 'VEDAS36' },
+        { nominal: 42, real: 43675, code: 'VEDAS42' },
+        { nominal: 48, real: 47770, code: 'VEDAS48' },
+        { nominal: 60, real: 54000, code: 'VEDAS60' },
+        { nominal: 76, real: 76800, code: 'VEDAS76' },
+        { nominal: 96, real: 96000, code: 'VEDAS96' },
+      ],
+      'Piso Teto': []
+    };
+
+    const COND_SAMSUNG = {
+      'Horizontal': [
+        { hp: 4, real: 41287 },
+        { hp: 5, real: 47770 },
+        { hp: 6, real: 52888 },
+        { hp: 7, real: 61760 },
+        { hp: 8, real: 76432 },
+        { hp: 10, real: 95540 },
+        { hp: 12, real: 114648 },
+        { hp: 14, real: 136486 },
+      ],
+      'Vertical': [
+        { hp: 8, real: 76432 },
+        { hp: 10, real: 95540 },
+        { hp: 12, real: 114648 },
+        { hp: 14, real: 136486 },
+        { hp: 16, real: 153546 },
+        { hp: 18, real: 171972 },
+        { hp: 20, real: 191080 },
+        { hp: 22, real: 210188 },
+        { hp: 24, real: 229296 },
+        { hp: 26, real: 248404 },
+        { hp: 28, real: 268194 },
+        { hp: 30, real: 286620 },
+        { hp: 32, real: 305728 },
+        { hp: 34, real: 324836 },
+        { hp: 36, real: 343944 },
+        { hp: 38, real: 363052 },
+        { hp: 40, real: 382160 },
+        { hp: 42, real: 401268 },
+        { hp: 44, real: 420376 },
+        { hp: 46, real: 439484 },
+        { hp: 48, real: 458592 },
+        { hp: 50, real: 477700 },
+        { hp: 52, real: 496808 },
+        { hp: 54, real: 515916 },
+        { hp: 56, real: 535024 },
+        { hp: 58, real: 554132 },
+        { hp: 60, real: 573240 },
+        { hp: 62, real: 592348 },
+        { hp: 64, real: 611456 },
+        { hp: 66, real: 630564 },
+        { hp: 68, real: 649672 },
+        { hp: 70, real: 668780 },
+        { hp: 72, real: 687888 },
+        { hp: 74, real: 706996 },
+        { hp: 76, real: 726104 },
+        { hp: 78, real: 745212 },
+        { hp: 80, real: 764320 },
+        { hp: 82, real: 783428 },
+        { hp: 84, real: 802536 },
+        { hp: 86, real: 821644 },
+        { hp: 88, real: 840752 },
+        { hp: 90, real: 859860 },
+        { hp: 92, real: 879650 },
+        { hp: 94, real: 898758 },
+        { hp: 96, real: 917184 },
+        { hp: 98, real: 936292 },
+      ]
+    };
+
+    const EVAPS_DAIKIN = {
+      'Hi Wall': [
+        { nominal: 7, real: 20, codes: ['FXAQ20','VEWD7'] },
+        { nominal: 9, real: 25, codes: ['FXAQ25','VEWD9'] },
+        { nominal: 12, real: 32, codes: ['FXAQ32','VEWD12'] },
+        { nominal: 15, real: 40, codes: ['FXAQ40','VEWD15'] },
+        { nominal: 18, real: 50, codes: ['FXAQ50','VEWD18'] },
+        { nominal: 24, real: 63, codes: ['FXAQ63','VEWD24'] },
+      ],
+      '1 Via': [
+        { nominal: 7, real: 20, codes: ['FXEQ20','VEC1D7'] },
+        { nominal: 9, real: 25, codes: ['FXEQ25','VEC1D9'] },
+        { nominal: 12, real: 32, codes: ['FXEQ32','VEC1D12'] },
+        { nominal: 15, real: 40, codes: ['FXEQ40','VEC1D15'] },
+        { nominal: 18, real: 50, codes: ['FXEQ50','VEC1D18'] },
+        { nominal: 24, real: 63, codes: ['FXEQ63','VEC1D24'] },
+      ],
+      '4 Vias': [
+        { nominal: 7, real: 20, codes: ['FXFQ20','VEC4D7'] },
+        { nominal: 9, real: 25, codes: ['FXFQ25','VEC4D9'] },
+        { nominal: 12, real: 32, codes: ['FXFQ32','VEC4D12'] },
+        { nominal: 15, real: 40, codes: ['FXFQ40','VEC4D15'] },
+        { nominal: 18, real: 50, codes: ['FXFQ50','VEC4D18'] },
+        { nominal: 24, real: 63, codes: ['FXFQ63','VEC4D24'] },
+        { nominal: 30, real: 80, codes: ['FXFQ80','VEC4D30'] },
+        { nominal: 36, real: 100, codes: ['FXFQ100','VEC4D36'] },
+        { nominal: 47, real: 125, codes: ['FXFQ125','VEC4D47'] },
+        { nominal: 54, real: 140, codes: ['FXFQ140','VEC4D54'] },
+      ],
+      'Duto': [
+        { nominal: 7, real: 20, codes: ['FXSQ20','VEDAD7'] },
+        { nominal: 9, real: 25, codes: ['FXSQ25','VEDAD9'] },
+        { nominal: 12, real: 32, codes: ['FXSQ32','VEDAD12'] },
+        { nominal: 15, real: 40, codes: ['FXSQ40','VEDAD15'] },
+        { nominal: 18, real: 50, codes: ['FXSQ50','VEDAD18'] },
+        { nominal: 24, real: 63, codes: ['FXSQ63','VEDAD24'] },
+        { nominal: 30, real: 80, codes: ['FXSQ80','VEDAD30'] },
+        { nominal: 36, real: 100, codes: ['FXSQ100','VEDAD36'] },
+        { nominal: 48, real: 125, codes: ['FXSQ125','VEDAD48'] },
+        { nominal: 54, real: 140, codes: ['FXSQ140','VEDAD54'] },
+      ],
+      'Piso Teto': [
+        { nominal: 12, real: 32, codes: ['FXHQ32','VEPTD12'] },
+        { nominal: 24, real: 63, codes: ['FXHQ63','VEPTD24'] },
+        { nominal: 36, real: 100, codes: ['FXHQ100','VEPTD36'] },
+        { nominal: 48, real: 125, codes: ['FXHQ125','VEPTD48'] },
+        { nominal: 54, real: 140, codes: ['FXHQ140','VEPTD54'] },
+      ],
+    };
+
+    const COND_DAIKIN = {
+      'Vertical': [
+        { hp: 8, real: 200 }, { hp:10, real:250 }, { hp:12, real:300 }, { hp:14, real:350 },
+        { hp:16, real:400 }, { hp:18, real:450 }, { hp:20, real:500 }, { hp:22, real:550 },
+        { hp:24, real:600 }, { hp:26, real:650 }, { hp:28, real:700 }, { hp:30, real:750 },
+        { hp:32, real:800 }, { hp:34, real:850 }, { hp:36, real:900 }, { hp:38, real:950 },
+        { hp:40, real:1000 }, { hp:42, real:1050 }, { hp:44, real:1100 }, { hp:46, real:1150 },
+        { hp:48, real:1200 }, { hp:50, real:1250 }, { hp:52, real:1300 }, { hp:54, real:1350 },
+        { hp:56, real:1400 }, { hp:58, real:1450 }, { hp:60, real:1500 }, { hp:62, real:1550 },
+        { hp:64, real:1600 }, { hp:66, real:1650 }, { hp:68, real:1700 }, { hp:70, real:1750 },
+        { hp:72, real:1800 }, { hp:74, real:1850 }, { hp:76, real:1900 }, { hp:78, real:1950 },
+      ],
+      'Horizontal': [
+        { hp: 3, real: 72 },
+        { hp: 4, real: 100 },
+        { hp: 5, real: 125 },
+        { hp: 6, real: 150 },
+        { hp: 8, real: 200 },
+        { hp: 10, real: 223, volt: 220 },
+        { hp: 10, real: 250, volt: 380 },
+        { hp: 12, real: 300, volt: 380 },
+      ]
+    };
+
+    const BRANDS = {
+      'Samsung': { EVAPS: EVAPS_SAMSUNG, COND: COND_SAMSUNG, unitLabel: 'BTU/h' },
+      'Daikin':  { EVAPS: EVAPS_DAIKIN,  COND: COND_DAIKIN,  unitLabel: 'unidades Daikin' }
+    };
+
+    const state = {
+      brand: 'Samsung',
+      lista: [],
+      simulInvalid: false,
+      simulCappedDaikin: false
+    };
+
+    const fmt = n => n.toLocaleString('pt-BR');
+    const pct = x => (Math.round(x * 10) / 10).toString().replace('.', ',') + '%';
+
+    function getSimulFactorRaw() {
+      const el = document.querySelector('input[name="simul"]:checked');
+      return el ? parseFloat(el.value) : 1.30;
+    }
+    function getSimulFactorEffective() {
+      const raw = getSimulFactorRaw();
+      state.simulCappedDaikin = false;
+      if (state.brand === 'Daikin' && raw > 1.30) {
+        state.simulCappedDaikin = true;
+        return 1.30;
+      }
+      return raw;
+    }
+    function getOrientacao() {
+      const el = document.querySelector('input[name="orientacao"]:checked');
+      return el ? el.value : 'Vertical';
+    }
+    function getModo() {
+      const el = document.querySelector('input[name="modo"]:checked');
+      return el ? el.value : 'unidades';
+    }
+
+    function catalogoAtual() { return BRANDS[state.brand].EVAPS; }
+    function condensadorasAtuais() { return BRANDS[state.brand].COND; }
+    function unitLabelAtual() { return BRANDS[state.brand].unitLabel; }
+
+    function lookupEvapReal(brandEvaps, tipo, nominal) {
+      const arr = brandEvaps[tipo] || [];
+      const hit = arr.find(x => x.nominal === Number(nominal));
+      return hit ? hit.real : null;
+    }
+
+    function recalc() {
+      const res = document.getElementById('resultado');
+      const det = document.getElementById('detalhes');
+
+      if (state.lista.length === 0) {
+        state.simulInvalid = false;
+        hideSimulWarning();
+        res.innerHTML = '<span class="muted">— Sem resultados ainda —</span>';
+        det.innerHTML = '<span class="muted">Adicione evaporadoras para calcular.</span>';
+        return;
+      }
+
+      const orient = getOrientacao();
+      const brandEvaps = catalogoAtual();
+      const brandConds = condensadorasAtuais();
+      const unitLbl = unitLabelAtual();
+
+      let ignoredCount = 0;
+      const itensEfetivos = state.lista.map(it => {
+        const real = lookupEvapReal(brandEvaps, it.tipo, it.nominal);
+        if (real == null) ignoredCount++;
+        return { ...it, real, ignored: real == null };
+      });
+
+      const totalReal = itensEfetivos.filter(i => !i.ignored).reduce((t,i)=>t + i.real, 0);
+
+      const simulRaw = getSimulFactorRaw();
+      const simulEff = getSimulFactorEffective();
+
+      const invalid145Vertical = (Math.abs(simulRaw - 1.45) < 1e-6) && (orient === 'Vertical');
+      state.simulInvalid = invalid145Vertical;
+
+      if (invalid145Vertical) {
+        showSimulWarning('Limite Residencial (145%) permitido apenas para Condensadoras Horizontais', null);
+      } else if (state.brand === 'Daikin' && (simulRaw > 1.30)) {
+        showSimulWarning('Na Daikin o limite máximo é 130%. "Limite Residencial (145%)" só é permitido pela Samsung. Os cálculos abaixo consideram 130%.', null);
+      } else {
+        hideSimulWarning();
+      }
+
+      const cargaRequerida = totalReal / simulEff;
+      const candidatas = [...(brandConds[orient] || [])].sort((a,b)=>a.real - b.real);
+      const escolhida = candidatas.find(c => c.real >= cargaRequerida);
+
+      let html = '';
+      if (ignoredCount > 0) {
+        html += '<div class="warn" style="margin-bottom:8px;"><strong>' + ignoredCount + '</strong> Evaporadoras desconsideradas</div>';
+      }
+
+      if (state.simulInvalid) {
+        html += '<div class="warn" style="margin-bottom:12px;">Atenção: você selecionou <strong>145%</strong> com condensadora <strong>Vertical</strong>. Essa combinação é inválida.</div>';
+      }
+      if (state.simulCappedDaikin) {
+        html += '<div class="warn" style="margin-bottom:12px;">Atenção: na <strong>Daikin</strong> o limite é <strong>130%</strong>. Cálculo feito com 130%.</div>';
+      }
+
+      if (escolhida) {
+        const idx = candidatas.indexOf(escolhida);
+        const isDaikinHoriz10 = (state.brand === 'Daikin' && orient === 'Horizontal' && escolhida.hp === 10);
+        const isDaikinHoriz12 = (state.brand === 'Daikin' && orient === 'Horizontal' && escolhida.hp === 12);
+
+        function buildSimChipFor(escolha) {
+          if (isDaikinHoriz10) {
+            const todas10 = candidatas.filter(c => c.hp === 10);
+            todas10.sort((a,b)=>a.real - b.real);
+            const linhas = todas10.map(c => {
+              const sim = (totalReal / c.real) * 100;
+              const voltTxt = c.volt ? ' (' + c.volt + 'v)' : '';
+              return pct(sim) + voltTxt;
+            });
+            return linhas.join('<br>');
+          } else {
+            const sim = (totalReal / escolha.real) * 100;
+            return pct(sim);
+          }
+        }
+
+        if (state.brand === 'Samsung' && orient === 'Horizontal' && escolhida.hp === 14) {
+          html += '<div style="color: var(--bad); font-weight:700; margin-top:12px;">AVISO: Essa condensadora é de 380v</div>';
+        }
+
+        if (isDaikinHoriz12) {
+          html += '<div style="color: var(--bad); font-weight:700; margin-top:12px;">AVISO: Essa condensadora é de 380v</div>';
+        }
+
+        html += 
+          '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:50px;">' +
+            '<div>' +
+              '<strong>Condensadora ideal:</strong> ' 
+              + state.brand + ' VRF ' + escolhida.hp + 'HP'
+              + ((state.brand === 'Daikin' && orient === 'Horizontal' && escolhida.hp === 10 && escolhida.volt) 
+                   ? ' (' + escolhida.volt + 'v)' 
+                   : '') 
+              + '<br>' +
+              '<span class="tag">' + orient + '</span>' +
+              (state.brand === 'Samsung'
+                ? '<span class="tag">Cap. real: ' + fmt(escolhida.real) + ' BTU/h</span>'
+                : '<span class="tag">Cap.: ' + fmt(escolhida.real) + ' (Daikin)</span>') +
+            '</div>' +
+            '<div class="chip ' + (state.simulInvalid ? 'no' : 'ok') + '">Simultaneidade:<br>' + buildSimChipFor(escolhida) + '</div>' +
+          '</div>';
+
+        if (idx > 0) {
+          const menor = candidatas[idx - 1];
+          const simMenor = (totalReal / menor.real) * 100;
+          html += 
+            '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">' +
+              '<div>' +
+                '<strong>Uma abaixo:</strong> ' 
+                + state.brand + ' VRF ' + menor.hp + 'HP'
+                + ((state.brand === 'Daikin' && orient === 'Horizontal' && menor.hp === 10 && menor.volt) 
+                     ? ' (' + menor.volt + 'v)' 
+                     : '') 
+                + '<br>' +
+                '<span class="tag">' + orient + '</span>' +
+                (state.brand === 'Samsung'
+                  ? '<span class="tag">Cap. real: ' + fmt(menor.real) + ' BTU/h</span>'
+                  : '<span class="tag">Cap.: ' + fmt(menor.real) + ' (Daikin)</span>') +
+              '</div>' +
+              '<div class="chip no">Simultaneidade:<br>' + pct(simMenor) + '</div>' +
+            '</div>';
+        }
+        if (idx < candidatas.length - 1) {
+          const maior = candidatas[idx + 1];
+          const simMaior = (totalReal / maior.real) * 100;
+          html += 
+            '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:10px;">' +
+              '<div>' +
+                '<strong>Uma acima:</strong> ' 
+                + state.brand + ' VRF ' + maior.hp + 'HP'
+                + ((state.brand === 'Daikin' && orient === 'Horizontal' && maior.hp === 10 && maior.volt) 
+                     ? ' (' + maior.volt + 'v)' 
+                     : '') 
+                + '<br>' +
+                '<span class="tag">' + orient + '</span>' +
+                (state.brand === 'Samsung'
+                  ? '<span class="tag">Cap. real: ' + fmt(maior.real) + ' BTU/h</span>'
+                  : '<span class="tag">Cap.: ' + fmt(maior.real) + ' (Daikin)</span>') +
+              '</div>' +
+              '<div class="chip ok">Simultaneidade:<br>' + pct(simMaior) + '</div>' +
+            '</div>';
+        }
+      } else {
+        const maior = candidatas[candidatas.length - 1];
+        const simMaior = maior ? (totalReal / maior.real) * 100 : 0;
+        html += 
+          '<div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">' +
+            '<div><strong>Nenhuma condensadora ' + orient.toLowerCase() + ' atende</strong></div>' +
+            '<div class="chip no">Exigido (após simult.): ' + fmt(Math.ceil(cargaRequerida)) + ' ' + unitLbl + '</div>' +
+          '</div>';
+        if (maior) {
+          html += '<div class="muted" style="margin-top:6px">Maior disponível: ' + state.brand + ' VRF ' + maior.hp + 'HP (' + fmt(maior.real) + (state.brand==='Samsung' ? ' BTU/h' : ' Daikin') + ') — ficaria com Simultaneidade: ' + pct(simMaior) + '</div>';
+        }
+      }
+
+      res.innerHTML = html;
+      det.innerHTML = renderDetalhes(itensEfetivos, orient, simulRaw, simulEff, totalReal, unitLbl, ignoredCount);
+    }
+
+    function renderDetalhes(itensEfetivos, orient, simulRaw, simulEff, totalReal, unitLbl, ignoredCount) {
+      const modo = getModo();
+
+      const headerGrid =
+        '<div class="grid">' +
+          '<div><strong>Marca:</strong> ' + state.brand + '</div>' +
+          '<div><strong>Orientação:</strong> ' + orient + '</div>' +
+          '<div><strong>Simultaneidade (selecionada):</strong> ' + (simulRaw*100).toFixed(0) + '%' + (state.simulInvalid ? ' <span class="tag" style="color: var(--bad); border-color: rgba(248,81,73,0.18);">INVÁLIDA p/ Vertical</span>' : '') + (state.simulCappedDaikin ? ' <span class="tag" style="color: var(--warn); border-color: rgba(210,153,34,0.22);">Capado p/ 130%</span>' : '') + '</div>' +
+'<div><strong>Soma das evaporadoras (válidas):</strong> ' 
+  + fmt(totalReal) + ' ' + unitLbl 
+  + (ignoredCount? '<br><span class="tag" style="color:var(--bad);">+'+ignoredCount+' descons.</span>':'') 
+  + '</div><strong>Capacidade mínima requerida (após simult.):</strong> ' + fmt(Math.ceil(totalReal / simulEff || 0)) + ' ' + unitLbl + '</div>' +
+        '</div>' +
+        '<div style="height:8px"></div>';
+
+      if (modo === 'unidades') {
+        const linhas = itensEfetivos.map((i, idx) => {
+          const cls = i.ignored ? ' class="row-ignored"' : '';
+          const realTxt = i.ignored ? '—' : fmt(i.real);
+          return '<tr' + cls + '>' +
+              '<td>' + (idx+1) + '</td>' +
+              '<td>' + i.tipo + '</td>' +
+              '<td>' + i.nominal + '</td>' +
+              '<td>' + realTxt + '</td>' +
+              '<td><button data-del="' + idx + '" class="secondary">Remover</button></td>' +
+            '</tr>';
+        }).join('');
+        const table =
+          '<table>' +
+            '<thead><tr><th>#</th><th>Tipo</th><th>Nominal</th><th>Real ('+unitLbl+')</th><th></th></tr></thead>' +
+            '<tbody>' + linhas + '</tbody>' +
+          '</table>';
+        setTimeout(() => {
+          document.querySelectorAll('button[data-del]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = +btn.getAttribute('data-del');
+              state.lista.splice(idx,1);
+              recalc();
+            });
+          });
+        }, 0);
+        return headerGrid + table;
+      } else {
+        const grupos = {};
+        itensEfetivos.forEach(i => {
+          const key = i.tipo + '|' + i.nominal;
+          if (!grupos[key]) grupos[key] = { tipo: i.tipo, nominal: i.nominal, real: i.real, ignored: i.ignored, qtd: 0 };
+          grupos[key].qtd++;
+        });
+        const linhas = Object.entries(grupos).map(([key, g], idx) => {
+          const cls = g.ignored ? ' class="row-ignored"' : '';
+          const realTxt = g.ignored ? '—' : fmt(g.real);
+          return '<tr' + cls + '>' +
+              '<td>' + (idx+1) + '</td>' +
+              '<td>' + g.tipo + '</td>' +
+              '<td>' + g.nominal + '</td>' +
+              '<td>' + realTxt + '</td>' +
+              '<td><input type="number" data-grupo="' + key + '" value="' + g.qtd + '" min="0" style="width:60px;"></td>' +
+            '</tr>';
+        }).join('');
+        const table =
+          '<table>' +
+            '<thead><tr><th>#</th><th>Tipo</th><th>Nominal</th><th>Real ('+unitLbl+')</th><th>Qtd</th></tr></thead>' +
+            '<tbody>' + linhas + '</tbody>' +
+          '</table>';
+
+        setTimeout(() => {
+          document.querySelectorAll('input[data-grupo]').forEach(inp => {
+            inp.addEventListener('change', () => {
+              const key = inp.getAttribute('data-grupo');
+              const qtd = parseInt(inp.value,10);
+              const [tipo, nominal] = key.split('|');
+              const atuais = state.lista.filter(i => i.tipo===tipo && String(i.nominal)===String(nominal)).length;
+
+              if (atuais < qtd) {
+                for (let k=0; k<(qtd-atuais); k++) state.lista.push({ tipo, nominal:+nominal });
+              } else if (atuais > qtd) {
+                let remover = atuais - qtd;
+                for (let i=0; i<state.lista.length && remover>0; i++) {
+                  const it = state.lista[i];
+                  if (it.tipo===tipo && String(it.nominal)===String(nominal)) {
+                    state.lista.splice(i,1);
+                    i--; remover--;
+                  }
+                }
+              }
+              recalc();
+            });
+          });
+        }, 0);
+
+        return headerGrid + table;
+      }
+    }
+
+    const tipoEvapSel = document.getElementById('tipoEvap');
+    const modeloEvapSel = document.getElementById('modeloEvap');
+
+    function popularTipos(preserveCurrent=true) {
+      const atual = catalogoAtual();
+      const prevTipo = preserveCurrent ? tipoEvapSel.value : null;
+      tipoEvapSel.innerHTML = '';
+      Object.keys(atual).forEach((tipo) => {
+        const opt = document.createElement('option');
+        opt.value = tipo; opt.textContent = tipo;
+        tipoEvapSel.appendChild(opt);
+      });
+      if (prevTipo && atual[prevTipo]) {
+        tipoEvapSel.value = prevTipo;
+      } else {
+        tipoEvapSel.value = Object.keys(atual)[0] || '';
+      }
+    }
+
+    function popularModelos(preserveCurrent=true) {
+      const atual = catalogoAtual();
+      const tipo = tipoEvapSel.value;
+      const modelos = atual[tipo] || [];
+      const prevModelo = preserveCurrent ? modeloEvapSel.value : null;
+
+      modeloEvapSel.innerHTML = '';
+      if (modelos.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = '— sem modelos —';
+        opt.value = '';
+        modeloEvapSel.appendChild(opt);
+        modeloEvapSel.disabled = true;
+      } else {
+        modelos.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = String(m.nominal);
+          const realText = (state.brand === 'Samsung')
+            ? (m.nominal + ' (real ' + fmt(m.real) + ')')
+            : (m.nominal + ' (real ' + fmt(m.real) + ')');
+          opt.textContent = realText;
+          modeloEvapSel.appendChild(opt);
+        });
+        modeloEvapSel.disabled = false;
+        if (prevModelo && modelos.find(m => String(m.nominal) === String(prevModelo))) {
+          modeloEvapSel.value = prevModelo;
+        }
+      }
+    }
+
+    tipoEvapSel.addEventListener('change', () => {
+      popularModelos(false);
+      modeloEvapSel.focus();
+    });
+
+    function addEvapFromUI() {
+      const tipo = tipoEvapSel.value;
+      const modelos = (catalogoAtual()[tipo] || []);
+      if (modelos.length === 0) return;
+      const nominal = parseInt(modeloEvapSel.value, 10);
+      if (!nominal) return;
+      state.lista.push({ tipo, nominal });
+      recalc();
+    }
+
+    document.getElementById('btnAdd').addEventListener('click', addEvapFromUI);
+    [tipoEvapSel, modeloEvapSel].forEach(el => {
+      el.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); addEvapFromUI(); }
+      });
+    });
+    document.getElementById('btnLimpar').addEventListener('click', () => {
+      state.lista = [];
+      recalc();
+    });
+
+    const simulWarningEl = document.getElementById('simulWarning');
+
+    function showSimulWarning(msg, ms = 3800) {
+      simulWarningEl.textContent = msg;
+      simulWarningEl.style.display = '';
+      if (showSimulWarning._t) clearTimeout(showSimulWarning._t);
+      if (ms !== null) {
+        showSimulWarning._t = setTimeout(()=> simulWarningEl.style.display = 'none', ms);
+      } else {
+        showSimulWarning._t = null;
+      }
+    }
+
+    function hideSimulWarning() {
+      simulWarningEl.style.display = 'none';
+      if (showSimulWarning._t) { clearTimeout(showSimulWarning._t); showSimulWarning._t = null; }
+    }
+
+    function isSimulAllowedForVertical(simulValue, orient) {
+      return !(simulValue === '1.45' && orient === 'Vertical');
+    }
+
+    function setPillActive(groupId, value) {
+      const group = document.getElementById(groupId);
+      if (!group) return;
+      group.querySelectorAll('.pill').forEach(lbl => lbl.classList.remove('active'));
+      group.querySelectorAll('.pill').forEach(lbl => {
+        const inp = lbl.querySelector('input');
+        if (!inp) return;
+        if (inp.value === value) {
+          lbl.classList.add('active');
+          inp.checked = true;
+        } else {
+          inp.checked = false;
+        }
+      });
+    }
+
+    function makePillsActiveWithConstraints(groupId) {
+      document.querySelectorAll('#' + groupId + ' .pill').forEach(lbl => {
+        lbl.addEventListener('click', () => {
+          const inp = lbl.querySelector('input');
+          if (!inp) return;
+          const value = inp.value;
+
+          if (groupId === 'simuls') {
+            setPillActive(groupId, value);
+            const orient = getOrientacao();
+            const allowed = isSimulAllowedForVertical(value, orient);
+
+            if (!allowed) {
+              showSimulWarning('Limite Residencial (145%) é inconsistente com Condensadoras Verticais — resultados podem estar incorretos', null);
+              state.simulInvalid = true;
+            } else if (state.brand === 'Daikin' && parseFloat(value) > 1.30) {
+              showSimulWarning('Na Daikin o limite máximo é 130%. "Limite Residencial (145%)" só é permitido pela Samsung. Cálculo será feito com 130%.', null);
+            } else {
+              hideSimulWarning();
+              state.simulInvalid = false;
+            }
+            recalc();
+            return;
+          }
+
+          if (groupId === 'orientacoes') {
+            setPillActive(groupId, value);
+            const currentSimul = (document.querySelector('input[name="simul"]:checked') || {}).value;
+            if (!isSimulAllowedForVertical(currentSimul, value)) {
+              showSimulWarning('Limite Residencial (145%) é inconsistente com Condensadoras Verticais — resultados podem estar incorretos', null);
+              state.simulInvalid = true;
+            } else if (state.brand === 'Daikin' && parseFloat(currentSimul) > 1.30) {
+              showSimulWarning('Na Daikin o limite máximo é 130%. "Limite Residencial (145%)" só é permitido pela Samsung. Cálculo será feito com 130%.', null);
+              state.simulInvalid = false;
+            } else {
+              hideSimulWarning();
+              state.simulInvalid = false;
+            }
+            recalc();
+            return;
+          }
+
+          if (groupId === 'marcas') {
+            setPillActive(groupId, value);
+            state.brand = value;
+            popularTipos();
+            popularModelos();
+            const currentSimul = (document.querySelector('input[name="simul"]:checked') || {}).value;
+            const orient = getOrientacao();
+            if (!isSimulAllowedForVertical(currentSimul, orient)) {
+              showSimulWarning('Limite Residencial (145%) é inconsistente com Condensadoras Verticais — resultados podem estar incorretos', null);
+            } else if (state.brand === 'Daikin' && parseFloat(currentSimul) > 1.30) {
+              showSimulWarning('Na Daikin o limite máximo é 130%. "Limite Residencial (145%)" só é permitido pela Samsung. Cálculo será feito com 130%.', null);
+            } else {
+              hideSimulWarning();
+            }
+            recalc();
+            return;
+          }
+
+          setPillActive(groupId, value);
+          recalc();
+        });
+      });
+    }
+
+    const EVAPS_BY_CODE = {};
+
+    Object.keys(EVAPS_SAMSUNG).forEach(tipo => {
+      EVAPS_SAMSUNG[tipo].forEach(e => {
+        if (e.code) EVAPS_BY_CODE[e.code.toLowerCase()] = { tipo, nominal: e.nominal };
+      });
+    });
+
+    Object.keys(EVAPS_DAIKIN).forEach(tipo => {
+      EVAPS_DAIKIN[tipo].forEach(e => {
+        if (Array.isArray(e.codes)) {
+          e.codes.forEach(c => {
+            if (c) EVAPS_BY_CODE[c.toLowerCase()] = { tipo, nominal: e.nominal };
+          });
+        }
+      });
+    });
+
+    const codigoInput = document.getElementById('codigoEvap');
+    const btnAddCodigo = document.getElementById('btnAddCodigo');
+
+    function addEvapFromCode() {
+      const val = codigoInput.value.trim().toLowerCase();
+      if (!val) return;
+      codigoInput.classList.remove('ok','err');
+      const ev = EVAPS_BY_CODE[val];
+      if (ev) {
+        state.lista.push({ tipo: ev.tipo, nominal: ev.nominal });
+        recalc();
+        codigoInput.classList.add('ok');
+        codigoInput.value = "";
+        setTimeout(()=>codigoInput.classList.remove('ok'), 1400);
+      } else {
+        codigoInput.classList.add('err');
+      }
+    }
+
+    btnAddCodigo.addEventListener('click', addEvapFromCode);
+    codigoInput.addEventListener('keydown', ev=>{
+      if(ev.key==="Enter"){ ev.preventDefault(); addEvapFromCode(); }
+    });
+    codigoInput.addEventListener('input', ()=>{ codigoInput.classList.remove('ok','err'); });
+
+    function toggleModoAdd() {
+      const modo = document.querySelector('input[name="modoAdd"]:checked').value;
+      document.getElementById('uiSelecionar').style.display = (modo==="selecionar") ? "" : "none";
+      document.getElementById('uiCodigo').style.display = (modo==="codigo") ? "" : "none";
+    }
+
+    makePillsActiveWithConstraints('orientacoes');
+    makePillsActiveWithConstraints('simuls');
+    makePillsActiveWithConstraints('modoLista');
+    makePillsActiveWithConstraints('modoAdd');
+    makePillsActiveWithConstraints('marcas');
+
+    document.querySelectorAll('#modoAdd .pill').forEach(lbl=>{
+      lbl.addEventListener('click', toggleModoAdd);
+    });
+
+    popularTipos();
+    popularModelos();
+    toggleModoAdd();
+    recalc();
+  </script>
+
+  <footer style="text-align:center; margin-top: 20px;">
+    <img src="assets/logo.png" alt="Minha imagem" style="max-width: 50px;">
+  </footer>
+  <br>
+</body>
+</html>
