@@ -40,38 +40,35 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-accent flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center">
-          <div className="mx-auto w-24 h-24 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 mb-4">
-            <div className="relative">
-              <Snowflake className="h-8 w-8 text-white absolute -rotate-12" />
-              <Thermometer className="h-8 w-8 text-white rotate-12" />
-            </div>
+          <div className="mx-auto w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <Snowflake className="h-10 w-10 text-black" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">SulfrioCalc</h1>
-          <p className="text-white/80">Sistema de Cálculo HVAC</p>
+          <h1 className="text-6xl font-bold text-blue-400 mb-4">SULFRIO</h1>
+          <p className="text-gray-400 text-xl mb-8">Sistema Avançado de Cálculo HVAC</p>
         </div>
 
         {/* Login Card */}
-        <Card className="backdrop-blur-lg bg-white/10 border-white/20">
+        <Card className="bg-gray-900/80 border-gray-700 backdrop-blur-sm">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center text-white">Entrar</CardTitle>
-            <CardDescription className="text-center text-white/70">
+            <CardDescription className="text-center text-gray-400">
               Digite suas credenciais para acessar o sistema
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert className="bg-destructive/10 border-destructive/20">
-                  <AlertDescription className="text-white">{error}</AlertDescription>
+                <Alert className="bg-red-900/20 border-red-500/30">
+                  <AlertDescription className="text-red-400">{error}</AlertDescription>
                 </Alert>
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="usuario" className="text-white">Usuário</Label>
+                <Label htmlFor="usuario" className="text-gray-300">Usuário</Label>
                 <Input
                   id="usuario"
                   type="text"
@@ -79,12 +76,12 @@ const Login = () => {
                   value={usuario}
                   onChange={(e) => setUsuario(e.target.value)}
                   required
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-white/40"
+                  className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500 focus:border-blue-500"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="senha" className="text-white">Senha</Label>
+                <Label htmlFor="senha" className="text-gray-300">Senha</Label>
                 <Input
                   id="senha"
                   type="password"
@@ -92,24 +89,24 @@ const Login = () => {
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   required
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-white/40"
+                  className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-500 focus:border-blue-500"
                 />
               </div>
               
               <Button
                 type="submit"
-                className="w-full bg-white text-primary hover:bg-white/90"
+                className="w-full bg-blue-500 text-white hover:bg-blue-600"
                 disabled={isLoading}
               >
                 {isLoading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
             
-            <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
-              <p className="text-white/70 text-sm mb-2">Credenciais de teste:</p>
-              <div className="space-y-1 text-xs text-white/60">
-                <p><strong>Admin:</strong> admin / admin123</p>
-                <p><strong>Assistente:</strong> assistente / teste123</p>
+            <div className="mt-6 p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+              <p className="text-gray-400 text-sm mb-2">Credenciais de teste:</p>
+              <div className="space-y-1 text-xs text-gray-500">
+                <p><strong className="text-gray-300">Admin:</strong> admin / admin123</p>
+                <p><strong className="text-gray-300">Assistente:</strong> assistente / teste123</p>
               </div>
             </div>
           </CardContent>
