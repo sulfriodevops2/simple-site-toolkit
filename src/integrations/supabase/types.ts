@@ -14,7 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_sessions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          session_token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          session_token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          departamento: string | null
+          foto_url: string | null
+          id: string
+          nome_completo: string
+          perfil_acesso: Database["public"]["Enums"]["user_profile"]
+          senha: string
+          updated_at: string
+          usuario: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          departamento?: string | null
+          foto_url?: string | null
+          id?: string
+          nome_completo: string
+          perfil_acesso?: Database["public"]["Enums"]["user_profile"]
+          senha: string
+          updated_at?: string
+          usuario: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          departamento?: string | null
+          foto_url?: string | null
+          id?: string
+          nome_completo?: string
+          perfil_acesso?: Database["public"]["Enums"]["user_profile"]
+          senha?: string
+          updated_at?: string
+          usuario?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +93,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_profile: "assistente" | "administrador"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +220,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_profile: ["assistente", "administrador"],
+    },
   },
 } as const
