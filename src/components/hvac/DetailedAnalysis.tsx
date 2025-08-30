@@ -40,58 +40,46 @@ function parseDetails(details: string): DetailedData | null {
   const tag7Match = details.match(/(7 tratado como 9[^\n]*)/i)
   const tag7 = tag7Match?.[1] || undefined
   
-  // Split by lines and find model lines
-  const lines = details.split(/[\n\\n]/).filter(line => line.trim())
+  // Split by newlines properly
+  const lines = details.split('\n').filter(line => line.trim())
   console.log('Lines found:', lines)
   
-  // Extract models from lines that start with ✔ or ✖
+  // Extract models from lines that match the full pattern
   const modelos = lines
-    .filter(line => {
-      const hasCheckmark = /^[✔✖]/.test(line.trim())
-      console.log('Line:', line, 'Has checkmark:', hasCheckmark)
-      return hasCheckmark
-    })
+    .filter(line => line.trim().match(/^[✔✖]/))
     .map(line => {
       console.log('Processing line:', line)
       
       const compativel = line.trim().startsWith('✔')
       
-      // Extract model name - more flexible regex
-      const nomeMatch = line.match(/[✔✖]\s*([A-Za-z]+\s+\d+(?:\s+[A-Za-z]+)?)/i)
-      const nome = nomeMatch?.[1] || ''
+      // Regex to match: ✔ LG 18 - nominal 18 - máx 24 - limite (corporativo) = 19.8 - Compatível - Simultaneidade: 38,9%
+      const match = line.match(/^[✔✖]\s*([^-]+?)\s*-\s*nominal\s+(\d+)\s*-\s*máx\s+(\d+)\s*-\s*limite\s*\(([^)]+)\)\s*=\s*([0-9.,]+)\s*-\s*([^-]+?)\s*-\s*Simultaneidade:\s*([0-9,]+)%/i)
       
-      // Extract nominal value
-      const nominalMatch = line.match(/nominal\s+(\d+)/i)
-      const nominal = parseInt(nominalMatch?.[1] || '0')
+      if (match) {
+        const [, nome, nominalStr, maxStr, modo, limiteStr, status, simultaneidadeStr] = match
+        
+        const nominal = parseInt(nominalStr)
+        const max = parseInt(maxStr)
+        const limite = parseFloat(limiteStr.replace(',', '.'))
+        const simultaneidade = parseFloat(simultaneidadeStr.replace(',', '.'))
+        
+        const result = { 
+          nome: nome.trim(), 
+          nominal, 
+          max, 
+          limite, 
+          modo: modo.trim(), 
+          status: status.trim(), 
+          simultaneidade, 
+          compativel 
+        }
+        console.log('Parsed model:', result)
+        return result
+      }
       
-      // Extract max value
-      const maxMatch = line.match(/máx\s+(\d+)/i)
-      const max = parseInt(maxMatch?.[1] || '0')
-      
-      // Extract limit and mode
-      const limiteMatch = line.match(/limite\s*\(([^)]+)\)\s*=\s*([0-9.,]+)/i)
-      const modo = limiteMatch?.[1] || ''
-      const limite = parseFloat(limiteMatch?.[2]?.replace(',', '.') || '0')
-      
-      // Extract simultaneity percentage
-      const simultaneidadeMatch = line.match(/Simultaneidade:\s*([0-9,]+)%/i)
-      const simultaneidade = parseFloat(simultaneidadeMatch?.[1]?.replace(',', '.') || '0')
-      
-      // Extract status
-      let status = 'Incompatível'
-      if (line.includes('Compatível')) status = 'Compatível'
-      else if (line.includes('Ultrapassa limite')) status = 'Ultrapassa limite'
-      else if (line.includes('Combinação não listada')) status = 'Combinação não listada'
-      
-      const result = { nome, nominal, max, limite, modo, status, simultaneidade, compativel }
-      console.log('Parsed model:', result)
-      return result
+      return null
     })
-    .filter(modelo => {
-      const isValid = modelo.nome && !isNaN(modelo.nominal) && modelo.nominal > 0
-      console.log('Model valid:', isValid, modelo)
-      return isValid
-    })
+    .filter(modelo => modelo !== null && modelo.nome && !isNaN(modelo.nominal) && modelo.nominal > 0)
   
   console.log('Final modelos:', modelos)
   return { entrada, soma, tag7, modelos }
