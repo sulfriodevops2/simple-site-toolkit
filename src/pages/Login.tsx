@@ -115,6 +115,13 @@ const Login = () => {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-500">
+            Sistema desenvolvido para cálculos precisos de equipamentos HVAC • ©2025 Sulfrioservice.com.br, ltda
+          </p>
+        </div>
       </div>
     </div>
   );
