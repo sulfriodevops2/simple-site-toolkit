@@ -10,6 +10,7 @@ import { HVACCard } from '@/components/ui/hvac-card';
 import { StatusChip } from '@/components/ui/status-chip';
 import { Calculator, Settings, Thermometer, Wind, Zap, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { VRFCondensadoraCalculator } from '@/components/hvac/VRFCondensadoraCalculator';
 
 const VRFCalculator = () => {
   const [calculation, setCalculation] = useState({
@@ -75,6 +76,9 @@ const VRFCalculator = () => {
           com análise detalhada de eficiência energética
         </p>
       </div>
+
+      {/* Seção de Calculadora de Condensadoras */}
+      <VRFCondensadoraCalculator />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Input Panel */}
