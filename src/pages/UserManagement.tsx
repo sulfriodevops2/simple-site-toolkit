@@ -10,8 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Search, Plus, Edit, Trash2, UserX, RotateCcw, User } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, UserX, RotateCcw, User, ArrowLeft } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import { Link } from 'react-router-dom';
 
 interface UserData {
   id: string;
@@ -218,6 +219,14 @@ const UserManagement = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      {/* Header with Back Button */}
+      <div className="flex items-center gap-4 mb-6">
+        <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="w-5 h-5" />
+        </Link>
+        <h1 className="text-2xl font-bold">Configurações</h1>
+      </div>
+      
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

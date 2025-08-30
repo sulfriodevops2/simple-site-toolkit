@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { HVACCard } from '@/components/ui/hvac-card';
 import { StatusChip } from '@/components/ui/status-chip';
-import { Calculator, Settings, Thermometer, Wind, Zap } from 'lucide-react';
+import { Calculator, Settings, Thermometer, Wind, Zap, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const VRFCalculator = () => {
   const [calculation, setCalculation] = useState({
@@ -54,6 +55,14 @@ const VRFCalculator = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-6">
+      {/* Header with Back Button */}
+      <div className="flex items-center gap-4 mb-6">
+        <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="w-5 h-5" />
+        </Link>
+        <h1 className="text-2xl font-bold">VRF Calculator</h1>
+      </div>
+      
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2">
           <Wind className="h-8 w-8 text-primary" />

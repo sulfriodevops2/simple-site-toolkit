@@ -7,41 +7,39 @@ import { CalculationResult } from "@/components/hvac/CalculationResult"
 import { DetailedAnalysis } from "@/components/hvac/DetailedAnalysis"
 import { ArrowLeft, Calculator, Snowflake } from "lucide-react"
 import { Link } from "react-router-dom"
+import { parseEntrada, calcular, type DetailedResult } from "@/utils/hvac-calculator"
 
 export default function HVACCalculator() {
   const [evaporators, setEvaporators] = useState("")
   const [mode, setMode] = useState("residencial")
   const [brand, setBrand] = useState("todas")
-  const [results, setResults] = useState<any[]>([])
+  const [results, setResults] = useState<DetailedResult[]>([])
   const [details, setDetails] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   const handleCalculate = async () => {
     setLoading(true)
     
-    // Simular cálculo - aqui você integraria a lógica do arquivo original
-    setTimeout(() => {
-      const mockResults = [
-        {
-          nome: "LG 24",
-          capNominal: 24000,
-          capEfetiva: 33600,
-          uso: 85,
-          status: "ok"
-        },
-        {
-          nome: "Daikin 28",
-          capNominal: 28000,
-          capEfetiva: 39200,
-          uso: 72,
-          status: "ok"
-        }
-      ]
+    try {
+      const entradaOriginal = parseEntrada(evaporators)
       
-      setResults(mockResults)
-      setDetails("Análise realizada com sucesso.\nCompatibilidade verificada para todas as combinações.")
+      if (entradaOriginal.length === 0) {
+        setResults([])
+        setDetails("Informe ao menos uma evaporadora (7, 9, 12, 18, 24).")
+        setLoading(false)
+        return
+      }
+
+      const calculation = calcular(entradaOriginal, mode, brand)
+      setResults(calculation.results)
+      setDetails(calculation.details)
       setLoading(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Error calculating:", error)
+      setResults([])
+      setDetails("Erro no cálculo. Verifique os dados informados.")
+      setLoading(false)
+    }
   }
 
   const handleClear = () => {
