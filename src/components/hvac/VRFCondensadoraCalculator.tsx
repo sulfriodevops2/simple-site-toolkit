@@ -23,18 +23,19 @@ export function VRFCondensadoraCalculator() {
 
   const handleCalculate = () => {
     const simultaneidadeValues = {
-      corporativo: 1.10,
-      padrao: 1.30,
-      residencial: 1.45
+      corporativo: 110,
+      padrao: 130,
+      residencial: 145
     };
 
-    const baseCapacity = parseInt(params.quantidade) * 5118; // Valor base do Hi Wall
+    const qty = parseInt(params.quantidade) || 0;
+    const baseCapacity = qty * 5118; // Valor real do Hi Wall 5
     const entrada = [baseCapacity];
     const simultaneidade = simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
     
-    // Calcula para ambas as marcas
-    const samsungResult = calcularCondensadoraVRF(entrada, simultaneidade, "samsung");
-    const daikinResult = calcularCondensadoraVRF(entrada, simultaneidade, "daikin");
+    // Calcula para ambas as marcas considerando a orientação
+    const samsungResult = calcularCondensadoraVRF(entrada, simultaneidade, "samsung", params.tipoCondensadora as any);
+    const daikinResult = calcularCondensadoraVRF(entrada, simultaneidade, "daikin", params.tipoCondensadora as any);
 
     setResults({
       samsung: { ...samsungResult, orientacao: params.tipoCondensadora },

@@ -1,5 +1,5 @@
 import { catalogs } from "./vrf-catalogs"
-
+import { calcCondenser } from "./vrf-engine"
 export function calcularVRF({ area, rooms, ceiling, insulation, occupancy, equipment }: any) {
   let baseBtu = area * 600
 
@@ -23,37 +23,28 @@ export function calcularVRF({ area, rooms, ceiling, insulation, occupancy, equip
   }
 }
 
-export function calcularCondensadoraVRF(entrada: number[], simultaneidade: number, brand: "samsung" | "daikin") {
-  const soma = entrada.reduce((a, b) => a + b, 0)
-  const capacidadeMinima = soma * simultaneidade
+export function calcularCondensadoraVRF(
+  entrada: number[],
+  simultaneidade: number,
+  brand: "samsung" | "daikin",
+  orientation: "vertical" | "horizontal" = "vertical"
+) {
+  // Convert entrada (array of BTU/h values) to a single aggregated evaporator
+  const soma = entrada.reduce((a, b) => a + b, 0);
+  const percent = simultaneidade > 2 ? Math.round(simultaneidade) : Math.round(simultaneidade * 100);
 
-  const condensadoras = catalogs[brand]
-  
-  // Encontra a condensadora ideal (primeira que atende a capacidade mínima)
-  const condensadoraIdeal = condensadoras.find(c => c.nominal >= capacidadeMinima)
-  
-  // Encontra uma acima (próxima maior)
-  const indexIdeal = condensadoras.findIndex(c => c.nominal >= capacidadeMinima)
-  const umaAcima = indexIdeal >= 0 && indexIdeal < condensadoras.length - 1 
-    ? condensadoras[indexIdeal + 1] 
-    : condensadoras[condensadoras.length - 1]
-
-  const calcularSimultaneidade = (condensadora: any) => {
-    if (!condensadora) return "0%"
-    return ((soma / condensadora.nominal) * 100).toFixed(1) + "%"
-  }
+  const res = calcCondenser({
+    brand: brand as any,
+    orientation: orientation as any,
+    simultPercent: percent,
+    evaps: [{ tipo: "Gen", nominal: 0, real: soma, qty: 1 }],
+  });
 
   return {
-    condensadoraIdeal: condensadoraIdeal ? {
-      ...condensadoraIdeal,
-      simultaneidade: calcularSimultaneidade(condensadoraIdeal)
-    } : null,
-    umaAcima: umaAcima ? {
-      ...umaAcima,
-      simultaneidade: calcularSimultaneidade(umaAcima)
-    } : null,
-    somaEvaporadoras: soma,
-    capacidadeMinima: Math.round(capacidadeMinima),
-    marca: brand
-  }
+    condensadoraIdeal: res.ideal ? { ...res.ideal, simultaneidade: `${res.ideal.uso}%` } : null,
+    umaAcima: res.oneUp ? { ...res.oneUp, simultaneidade: `${res.oneUp.uso}%` } : null,
+    somaEvaporadoras: res.sumBTUh,
+    capacidadeMinima: res.minRequiredBTUh,
+    marca: brand,
+  };
 }
