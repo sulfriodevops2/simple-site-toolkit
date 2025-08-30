@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { HVACCard } from "@/components/ui/hvac-card"
-import { Calculator, Snowflake, Wind, Thermometer } from "lucide-react"
+import { Calculator, Snowflake, Wind, Thermometer, Settings } from "lucide-react"
+import { useAuth } from '@/hooks/useAuth'
 
 export default function Index() {
+  const { isAdmin } = useAuth();
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90">
       {/* Hero Section */}
@@ -23,7 +26,7 @@ export default function Index() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${isAdmin() ? 'lg:grid-cols-3' : ''} gap-6 w-full max-w-4xl`}>
           <Link to="/multi" className="group">
             <HVACCard 
               title="Multi Split" 
@@ -71,6 +74,32 @@ export default function Index() {
               </div>
             </HVACCard>
           </Link>
+
+          {isAdmin() && (
+            <Link to="/configuracoes/usuarios" className="group">
+              <HVACCard 
+                title="Configurações" 
+                description="Gerenciamento de usuários e sistema"
+                variant="default"
+                className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-muted-foreground/20 rounded-lg flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-foreground">Admin Panel</div>
+                      <div className="text-xs text-muted-foreground">Usuários • Perfis • Sistema</div>
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 bg-muted-foreground/10 rounded-full flex items-center justify-center group-hover:bg-muted-foreground/20 transition-colors">
+                    <Settings className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                </div>
+              </HVACCard>
+            </Link>
+          )}
         </div>
 
         {/* Footer */}
