@@ -183,7 +183,11 @@ export function VRFCondensadoraCalculator() {
             <div className="space-y-3">
               <h3 className="font-semibold text-sm">Selecionar Evaporadora</h3>
               <div className="grid grid-cols-3 gap-2">
-                <Select value={params.evaporadora} onValueChange={(value) => setParams(prev => ({ ...prev, evaporadora: value }))}>
+                <Select value={params.evaporadora} onValueChange={(value) => {
+                  const newEvapMap = EVAPORADORAS_MAP[value as keyof typeof EVAPORADORAS_MAP] || {};
+                  const firstNominal = Object.keys(newEvapMap)[0] || '7';
+                  setParams(prev => ({ ...prev, evaporadora: value, nominal: firstNominal }));
+                }}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -198,11 +202,11 @@ export function VRFCondensadoraCalculator() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="7">7 (real {(7507).toLocaleString()})</SelectItem>
-                    <SelectItem value="9">9 (real {(9000).toLocaleString()})</SelectItem>
-                    <SelectItem value="12">12 (real {(12000).toLocaleString()})</SelectItem>
-                    <SelectItem value="18">18 (real {(18000).toLocaleString()})</SelectItem>
-                    <SelectItem value="24">24 (real {(24000).toLocaleString()})</SelectItem>
+                    {Object.entries(EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP] || {}).map(([nominal, real]) => (
+                      <SelectItem key={nominal} value={nominal}>
+                        {nominal} (real {real.toLocaleString()})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Select value={params.quantidade} onValueChange={(value) => setParams(prev => ({ ...prev, quantidade: value }))}>
