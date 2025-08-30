@@ -63,6 +63,21 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			backgroundImage: {
+				'gradient-bg': 'var(--gradient-bg)'
+			},
+			textShadow: {
+				'glow': 'var(--text-glow)',
+				'default': 'var(--text-shadow)'
+			},
+			fontSize: {
+				'9xl': ['8rem', { lineHeight: '1' }],
+				'10xl': ['10rem', { lineHeight: '1' }],
+				'11xl': ['12rem', { lineHeight: '1' }],
+			},
+			transitionTimingFunction: {
+				'smooth': 'var(--transition-smooth)'
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
@@ -92,5 +107,18 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		function({ addUtilities }) {
+			const newUtilities = {
+				'.text-shadow-glow': {
+					textShadow: 'var(--text-glow)',
+				},
+				'.text-shadow-default': {
+					textShadow: 'var(--text-shadow)',
+				},
+			}
+			addUtilities(newUtilities)
+		}
+	],
 } satisfies Config;
