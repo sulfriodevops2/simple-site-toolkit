@@ -45,7 +45,11 @@ const Login = () => {
         {/* Logo */}
         <div className="text-center">
           <div className="mx-auto w-20 h-20 bg-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-            <Snowflake className="h-10 w-10 text-black" />
+            <img 
+              src="/lovable-uploads/62ef3cac-2a46-4916-8f53-2ff94d9ca0e4.png" 
+              alt="Sulfrio Logo" 
+              className="h-12 w-12 object-contain"
+            />
           </div>
           <h1 className="text-6xl font-bold text-blue-400 mb-4">SULFRIO</h1>
           <p className="text-gray-400 text-xl mb-8">Sistema Avançado de Cálculo HVAC</p>
