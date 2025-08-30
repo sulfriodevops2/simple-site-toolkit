@@ -13,12 +13,16 @@ export default function Index() {
       <div className="flex flex-col items-center justify-center min-h-screen px-6">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-gradient-cool rounded-2xl flex items-center justify-center shadow-glow-cool">
-              <Snowflake className="w-8 h-8 text-background animate-pulse" />
+            <div className="w-24 h-24 bg-gradient-cool rounded-2xl flex items-center justify-center shadow-glow-cool">
+              <img 
+                src="/lovable-uploads/62ef3cac-2a46-4916-8f53-2ff94d9ca0e4.png" 
+                alt="Sulfrio Logo" 
+                className="w-12 h-12 object-contain"
+              />
             </div>
           </div>
           <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-primary-cool via-foreground to-primary-cool bg-clip-text text-transparent mb-4">
-            SULFRIO
+            Sulfrio Service
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
             Sistema Avançado de Cálculo HVAC
@@ -105,7 +109,7 @@ export default function Index() {
         {/* Footer */}
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground">
-            Sistema desenvolvido para cálculos precisos de equipamentos HVAC
+            Sistema desenvolvido para cálculos precisos de equipamentos HVAC • ©2025 Sulfrioservice.com.br, ltda
           </p>
         </div>
       </div>
