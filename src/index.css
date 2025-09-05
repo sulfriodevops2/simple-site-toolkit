@@ -43,6 +43,8 @@ All colors MUST be HSL.
     --primary-cool-glow: 200 100% 70%;
     --primary-warm: 30 100% 60%;
     --primary-warm-glow: 30 100% 70%;
+    --primary-green: 150 80% 50%;
+    --primary-green-glow: 150 80% 60%;
     --system-green: 150 100% 40%;
     --system-red: 0 100% 60%;
     --system-blue: 220 100% 60%;
@@ -50,12 +52,14 @@ All colors MUST be HSL.
     /* Gradients */
     --gradient-cool: linear-gradient(135deg, hsl(var(--primary-cool)) 0%, hsl(var(--primary-cool-glow)) 100%);
     --gradient-warm: linear-gradient(135deg, hsl(var(--primary-warm)) 0%, hsl(var(--primary-warm-glow)) 100%);
+    --gradient-green: linear-gradient(135deg, hsl(var(--primary-green)) 0%, hsl(var(--primary-green-glow)) 100%);
     --gradient-bg: linear-gradient(135deg, hsl(240, 10%, 3.9%) 0%, hsl(240, 8%, 6%) 50%, hsl(240, 10%, 3.9%) 100%);
     --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
     
     /* Effects */
     --glow-cool: 0 0 30px hsl(var(--primary-cool) / 0.3);
     --glow-warm: 0 0 30px hsl(var(--primary-warm) / 0.3);
+    --glow-green: 0 0 30px hsl(var(--primary-green) / 0.3);
     --text-glow: 0 0 20px hsl(0 0% 98% / 0.3);
     --shadow-elevation: 0 8px 32px rgba(0,0,0,0.4);
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);

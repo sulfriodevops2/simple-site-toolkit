@@ -7,7 +7,7 @@ interface HVACCardProps {
   title?: string
   description?: string
   className?: string
-  variant?: "default" | "cool" | "warm"
+  variant?: "default" | "cool" | "warm" | "green"
 }
 
 export function HVACCard({ 
@@ -23,6 +23,7 @@ export function HVACCard({
       "hover:shadow-glow-cool transition-all duration-300",
       variant === "cool" && "border-primary-cool/30 shadow-glow-cool",
       variant === "warm" && "border-primary-warm/30 shadow-glow-warm",
+      variant === "green" && "border-primary-green/30 shadow-glow-green",
       className
     )}>
       {title && (
@@ -30,7 +31,8 @@ export function HVACCard({
           <CardTitle className={cn(
             "text-foreground font-semibold",
             variant === "cool" && "text-primary-cool",
-            variant === "warm" && "text-primary-warm"
+            variant === "warm" && "text-primary-warm",
+            variant === "green" && "text-primary-green"
           )}>
             {title}
           </CardTitle>

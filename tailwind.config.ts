@@ -30,6 +30,7 @@ export default {
 				},
 				"primary-cool": "hsl(var(--primary-cool))",
 				"primary-warm": "hsl(var(--primary-warm))",
+				"primary-green": "hsl(var(--primary-green))",
 				"system-green": "hsl(var(--system-green))",
 				"system-red": "hsl(var(--system-red))",
 				"system-blue": "hsl(var(--system-blue))",
@@ -74,11 +75,13 @@ export default {
 				"gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
 				"gradient-cool": "var(--gradient-cool)",
 				"gradient-warm": "var(--gradient-warm)",
+				"gradient-green": "var(--gradient-green)",
 				"gradient-card": "var(--gradient-card)",
 			},
 			boxShadow: {
 				"glow-cool": "var(--glow-cool)",
 				"glow-warm": "var(--glow-warm)",
+				"glow-green": "var(--glow-green)",
 				"elevation": "var(--shadow-elevation)",
 			},
 			textShadow: {
