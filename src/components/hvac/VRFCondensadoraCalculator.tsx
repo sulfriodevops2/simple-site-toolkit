@@ -12,9 +12,8 @@ import { calcularCondensadoraVRF } from '@/utils/vrf-calculator';
 import { evaporadoras } from '@/utils/evaporadoras';
 
 // Mapa correto das evaporadoras (conforme versão antiga)
-const EVAPORADORAS_MAP = (() => {
-  // Usamos a base de dados nova (Samsung por padrão para compatibilidade)
-  const cat = evaporadoras.samsung;
+const getEvaporadorasMap = (brand: "samsung" | "daikin") => {
+  const cat = evaporadoras[brand];
   const findTipo = (t: string) => cat.find(e => e.tipo === t)?.modelos || [];
   const toMap = (arr: ReadonlyArray<{ nominal: number; real: number }>) =>
     Object.fromEntries(arr.map(m => [m.nominal, m.real]));
@@ -26,7 +25,7 @@ const EVAPORADORAS_MAP = (() => {
     "duto": toMap(findTipo("Duto")),
     "piso-teto": toMap(findTipo("Piso Teto")),
   } as Record<string, Record<number, number>>;
-})();
+};
 
 export function VRFCondensadoraCalculator() {
   const [params, setParams] = useState({
@@ -47,6 +46,7 @@ export function VRFCondensadoraCalculator() {
 
   const [results, setResults] = useState<{ samsung: any; daikin: any } | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<"samsung" | "daikin">("samsung");
+  const [viewMode, setViewMode] = useState<"unidades" | "agrupado">("agrupado");
 
   const recalculate = () => {
     const simultaneidadeValues = {
@@ -79,7 +79,7 @@ export function VRFCondensadoraCalculator() {
   const handleAdd = () => {
     const nominal = parseInt(params.nominal) || 7;
     const qtd = parseInt(params.quantidade) || 1;
-    const evapMap = EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP];
+    const evapMap = getEvaporadorasMap(selectedBrand)[params.evaporadora as keyof ReturnType<typeof getEvaporadorasMap>];
     const realBTU = evapMap?.[nominal as keyof typeof evapMap] || 7507;
 
     setEvaporators(prev => {
@@ -120,6 +120,15 @@ export function VRFCondensadoraCalculator() {
   useEffect(() => {
     recalculate();
   }, [evaporators, params.simultaneidade, params.tipoCondensadora]);
+
+  // Recalcula evaporadores quando muda de marca
+  useEffect(() => {
+    setEvaporators(prev => prev.map(evap => {
+      const evapMap = getEvaporadorasMap(selectedBrand)[evap.type as keyof ReturnType<typeof getEvaporadorasMap>];
+      const newRealBTU = evapMap?.[evap.nominal as keyof typeof evapMap] || evap.realBTU;
+      return { ...evap, realBTU: newRealBTU };
+    }));
+  }, [selectedBrand]);
 
   return (
     <HVACCard>
@@ -182,7 +191,7 @@ export function VRFCondensadoraCalculator() {
               <h3 className="font-semibold text-sm">Selecionar Evaporadora</h3>
               <div className="grid grid-cols-3 gap-2">
                 <Select value={params.evaporadora} onValueChange={(value) => {
-                  const newEvapMap = EVAPORADORAS_MAP[value as keyof typeof EVAPORADORAS_MAP] || {};
+                  const newEvapMap = getEvaporadorasMap(selectedBrand)[value as keyof ReturnType<typeof getEvaporadorasMap>] || {};
                   const availableNominals = Object.keys(newEvapMap);
                   const firstNominal = availableNominals[0] || '7';
                   setParams(prev => ({ ...prev, evaporadora: value, nominal: firstNominal }));
@@ -203,7 +212,7 @@ export function VRFCondensadoraCalculator() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(EVAPORADORAS_MAP[params.evaporadora as keyof typeof EVAPORADORAS_MAP] || {}).map(([nominal, real]) => (
+                    {Object.entries(getEvaporadorasMap(selectedBrand)[params.evaporadora as keyof ReturnType<typeof getEvaporadorasMap>] || {}).map(([nominal, real]) => (
                       <SelectItem key={nominal} value={nominal}>
                         {nominal} (real {real.toLocaleString()})
                       </SelectItem>
@@ -286,8 +295,20 @@ export function VRFCondensadoraCalculator() {
         {results && evaporators.length > 0 && (
           <div className="border-t pt-6">
             <div className="flex gap-2 mb-4">
-              <Button variant="outline" size="sm">Por unidade</Button>
-              <Button variant="default" size="sm">Agrupado</Button>
+              <Button 
+                variant={viewMode === "unidades" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setViewMode("unidades")}
+              >
+                Por unidade
+              </Button>
+              <Button 
+                variant={viewMode === "agrupado" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setViewMode("agrupado")}
+              >
+                Agrupado
+              </Button>
             </div>
             
             <div className="grid grid-cols-2 gap-4 text-sm mb-4">
@@ -314,44 +335,80 @@ export function VRFCondensadoraCalculator() {
                 </tr>
               </thead>
               <tbody>
-                {evaporators.length > 0 ? evaporators.map((evap, index) => (
-                  <tr key={index}>
-                    <td className="p-2">{index + 1}</td>
-                    <td className="p-2">{
-                      evap.type === 'hi-wall' ? 'Hi Wall' : 
-                      evap.type === 'cassete-1-via' ? 'Cassete 1 Via' :
-                      evap.type === 'cassete-4-vias' ? 'Cassete 4 Vias' :
-                      evap.type === 'duto' ? 'Duto' :
-                      evap.type === 'piso-teto' ? 'Piso Teto' : evap.type
-                    }</td>
-                    <td className="p-2">{evap.nominal}</td>
-                    <td className="p-2">{evap.realBTU.toLocaleString()}</td>
-                    <td className="p-2">
-                      <Input 
-                        type="number" 
-                        min="1"
-                        value={evap.qtd} 
-                        onChange={(e) => handleChangeQtd(index, parseInt(e.target.value))} 
-                        className="w-16 h-8" 
-                      />
-                    </td>
-                    <td className="p-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => handleRemove(index)}
-                        className="h-8"
-                      >
-                        X
-                      </Button>
-                    </td>
-                  </tr>
-                )) : (
-                  <tr>
-                    <td colSpan={6} className="p-2 text-center text-muted-foreground">
-                      Adicione evaporadoras para calcular
-                    </td>
-                  </tr>
+                {viewMode === "unidades" ? (
+                  // Por unidade - mostra cada linha individualmente
+                  evaporators.length > 0 ? evaporators.map((evap, index) => (
+                    <tr key={index}>
+                      <td className="p-2">{index + 1}</td>
+                      <td className="p-2">{
+                        evap.type === 'hi-wall' ? 'Hi Wall' : 
+                        evap.type === 'cassete-1-via' ? 'Cassete 1 Via' :
+                        evap.type === 'cassete-4-vias' ? 'Cassete 4 Vias' :
+                        evap.type === 'duto' ? 'Duto' :
+                        evap.type === 'piso-teto' ? 'Piso Teto' : evap.type
+                      }</td>
+                      <td className="p-2">{evap.nominal}</td>
+                      <td className="p-2">{evap.realBTU.toLocaleString()}</td>
+                      <td className="p-2">{evap.qtd}</td>
+                      <td className="p-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleRemove(index)}
+                          className="h-8"
+                        >
+                          X
+                        </Button>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={6} className="p-2 text-center text-muted-foreground">
+                        Adicione evaporadoras para calcular
+                      </td>
+                    </tr>
+                  )
+                ) : (
+                  // Agrupado - permite editar quantidade
+                  evaporators.length > 0 ? evaporators.map((evap, index) => (
+                    <tr key={index}>
+                      <td className="p-2">{index + 1}</td>
+                      <td className="p-2">{
+                        evap.type === 'hi-wall' ? 'Hi Wall' : 
+                        evap.type === 'cassete-1-via' ? 'Cassete 1 Via' :
+                        evap.type === 'cassete-4-vias' ? 'Cassete 4 Vias' :
+                        evap.type === 'duto' ? 'Duto' :
+                        evap.type === 'piso-teto' ? 'Piso Teto' : evap.type
+                      }</td>
+                      <td className="p-2">{evap.nominal}</td>
+                      <td className="p-2">{evap.realBTU.toLocaleString()}</td>
+                      <td className="p-2">
+                        <Input 
+                          type="number" 
+                          min="1"
+                          value={evap.qtd} 
+                          onChange={(e) => handleChangeQtd(index, parseInt(e.target.value))} 
+                          className="w-16 h-8" 
+                        />
+                      </td>
+                      <td className="p-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleRemove(index)}
+                          className="h-8"
+                        >
+                          X
+                        </Button>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={6} className="p-2 text-center text-muted-foreground">
+                        Adicione evaporadoras para calcular
+                      </td>
+                    </tr>
+                  )
                 )}
               </tbody>
             </table>
