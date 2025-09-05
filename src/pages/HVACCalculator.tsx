@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { EvaporatorInput } from "@/components/hvac/EvaporatorInput"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ModeSelector } from "@/components/hvac/ModeSelector"
 import { BrandSelector } from "@/components/hvac/BrandSelector"
 import { CalculationResult } from "@/components/hvac/CalculationResult"
@@ -79,11 +81,68 @@ export default function HVACCalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Input Section */}
           <div className="lg:col-span-2 space-y-6">
-            <EvaporatorInput value={evaporators} onChange={setEvaporators} />
+            <Card>
+              <CardHeader>
+                <CardTitle>Evaporadoras</CardTitle>
+                <CardDescription>
+                  Digite as capacidades das evaporadoras separadas por vírgula (ex: 7, 9, 12, 18, 24)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Label htmlFor="evaporators">Capacidades (BTU/h)</Label>
+                  <Input
+                    id="evaporators"
+                    value={evaporators}
+                    onChange={(e) => setEvaporators(e.target.value)}
+                    placeholder="Ex: 7, 9, 12, 18, 24"
+                    className="w-full"
+                  />
+                </div>
+              </CardContent>
+            </Card>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <ModeSelector value={mode} onChange={setMode} />
-              <BrandSelector value={brand} onChange={setBrand} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>Modo de Simultaneidade</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Label>Modo</Label>
+                    <select 
+                      value={mode} 
+                      onChange={(e) => setMode(e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    >
+                      <option value="residencial">Residencial</option>
+                      <option value="corporativo">Corporativo</option>
+                      <option value="capacidade-maxima">Capacidade Máxima</option>
+                    </select>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Marca</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Label>Brand</Label>
+                    <select 
+                      value={brand} 
+                      onChange={(e) => setBrand(e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    >
+                      <option value="todas">Todas</option>
+                      <option value="lg">LG</option>
+                      <option value="samsung">Samsung</option>
+                      <option value="daikin">Daikin</option>
+                    </select>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="flex space-x-4">
