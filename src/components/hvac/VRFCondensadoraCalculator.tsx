@@ -290,7 +290,7 @@ export function VRFCondensadoraCalculator() {
                 
                 {results[selectedBrand].condensadoraIdeal && (
                   <div className="p-3 bg-muted rounded-lg">
-                    <p className="font-medium">Condensadora ideal: {results[selectedBrand].condensadoraIdeal.nome}</p>
+                    <p className="font-medium">Condensadora ideal: {results[selectedBrand].condensadoraIdeal.nome}{results[selectedBrand].condensadoraIdeal.volt ? ` (${results[selectedBrand].condensadoraIdeal.volt}v)` : ''}</p>
                     <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].condensadoraIdeal.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
                     <StatusChip className="bg-green-100 text-green-800 mt-1">
                       Simultaneidade: {results[selectedBrand].condensadoraIdeal.simultaneidade}
@@ -300,7 +300,7 @@ export function VRFCondensadoraCalculator() {
                 
                 {results[selectedBrand].umaAbaixo && (
                   <div className="p-3 bg-muted rounded-lg">
-                    <p className="font-medium">Uma abaixo: {results[selectedBrand].umaAbaixo.nome}</p>
+                    <p className="font-medium">Uma abaixo: {results[selectedBrand].umaAbaixo.nome}{results[selectedBrand].umaAbaixo.volt ? ` (${results[selectedBrand].umaAbaixo.volt}v)` : ''}</p>
                     <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAbaixo.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
                     <StatusChip className="bg-red-100 text-red-800 mt-1">
                       Simultaneidade: {results[selectedBrand].umaAbaixo.simultaneidade}
@@ -310,7 +310,7 @@ export function VRFCondensadoraCalculator() {
                 
                 {results[selectedBrand].umaAcima && (
                   <div className="p-3 bg-muted rounded-lg">
-                    <p className="font-medium">Uma acima: {results[selectedBrand].umaAcima.nome}</p>
+                    <p className="font-medium">Uma acima: {results[selectedBrand].umaAcima.nome}{results[selectedBrand].umaAcima.volt ? ` (${results[selectedBrand].umaAcima.volt}v)` : ''}</p>
                     <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAcima.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
                     <StatusChip className="bg-green-100 text-green-800 mt-1">
                       Simultaneidade: {results[selectedBrand].umaAcima.simultaneidade}

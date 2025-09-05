@@ -13,6 +13,7 @@ export interface Condenser {
   nome: string;
   nominal: number;     // nominal BTU/h of the condenser
   max: number;         // max supported BTU/h (optional use)
+  volt?: number;       // voltage (220v or 380v)
 }
 
 export interface CalcInput {
@@ -61,9 +62,9 @@ export const CATALOG: Record<Brand, Record<Orientation, Condenser[]>> = {
       { nome: "Daikin VRF 5HP",  nominal: 125, max: 138 },
       { nome: "Daikin VRF 6HP",  nominal: 150, max: 165 },
       { nome: "Daikin VRV H 8HP",  nominal: 200, max: 220 },
-      { nome: "Daikin VRV H 10HP", nominal: 223, max: 245 },
-      { nome: "Daikin VRV H 10HP", nominal: 250, max: 275 },
-      { nome: "Daikin VRV H 12HP", nominal: 300, max: 330 },
+      { nome: "Daikin VRV H 10HP", nominal: 223, max: 245, volt: 220 },
+      { nome: "Daikin VRV H 10HP", nominal: 250, max: 275, volt: 380 },
+      { nome: "Daikin VRV H 12HP", nominal: 300, max: 330, volt: 380 },
     ],
   },
 };

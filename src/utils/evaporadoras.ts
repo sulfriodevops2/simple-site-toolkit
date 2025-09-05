@@ -115,7 +115,7 @@ export const evaporadoras = {
       modelos: [
         { nominal: 12, real: 32 },
         { nominal: 24, real: 63 },
-        { nominal: 36, real: 100 },
+        { nominal: 36, real: 90 },
         { nominal: 48, real: 125 },
         { nominal: 54, real: 140 },
       ],
