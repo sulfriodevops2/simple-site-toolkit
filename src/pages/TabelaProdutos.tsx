@@ -4,14 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Plus, Edit, Trash2, Search, Save, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { FIELDS, type FieldSpec } from '@/admin/produtos/field-registry';
 
 interface Produto {
   id: string;
@@ -286,22 +287,40 @@ const TabelaProdutos = () => {
                   <Card key={produto.id} className={!produto.ativo ? 'opacity-60' : ''}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <h3 className="font-medium">{produto.nome}</h3>
-                              {produto.codigo && (
-                                <Badge variant="outline">{produto.codigo}</Badge>
-                              )}
-                              <Badge variant={produto.ativo ? 'default' : 'secondary'}>
-                                {produto.ativo ? 'Ativo' : 'Inativo'}
-                              </Badge>
+                            <div className="flex items-center space-x-4">
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <h3 className="font-medium">{produto.nome}</h3>
+                                  {produto.codigo && (
+                                    <Badge variant="outline">{produto.codigo}</Badge>
+                                  )}
+                                  <Badge variant={produto.ativo ? 'default' : 'secondary'}>
+                                    {produto.ativo ? 'Ativo' : 'Inativo'}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                  {getCurrentGrupos().find(g => g.value === produto.grupo)?.label} • Ordem: {produto.ordem}
+                                </p>
+                                {/* Show key attributes as badges */}
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {produto.atributos?.marca && (
+                                    <Badge variant="secondary" className="text-xs">{produto.atributos.marca}</Badge>
+                                  )}
+                                  {produto.atributos?.tipo && (
+                                    <Badge variant="secondary" className="text-xs">{produto.atributos.tipo}</Badge>
+                                  )}
+                                  {produto.atributos?.nominal && (
+                                    <Badge variant="secondary" className="text-xs">{produto.atributos.nominal}</Badge>
+                                  )}
+                                  {produto.atributos?.cap_real && (
+                                    <Badge variant="secondary" className="text-xs">real: {produto.atributos.cap_real}</Badge>
+                                  )}
+                                  {produto.atributos?.hp && (
+                                    <Badge variant="secondary" className="text-xs">{produto.atributos.hp}HP</Badge>
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              {getCurrentGrupos().find(g => g.value === produto.grupo)?.label} • Ordem: {produto.ordem}
-                            </p>
-                          </div>
-                        </div>
                         <div className="flex items-center space-x-2">
                           <Button
                             variant="outline"
@@ -360,20 +379,37 @@ const ProductForm = ({ produto, grupos, onSave, onCancel, loading }: ProductForm
     codigo: produto?.codigo || '',
     ordem: produto?.ordem || 0,
     ativo: produto?.ativo ?? true,
-    atributos: JSON.stringify(produto?.atributos || {}, null, 2),
+    atributos: produto?.atributos || {},
   });
+
+  const currentFields = formData.grupo ? FIELDS[formData.grupo] || [] : [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const atributos = JSON.parse(formData.atributos);
-      onSave({
-        ...formData,
-        atributos,
-      });
-    } catch (error) {
-      alert('JSON inválido nos atributos');
+    
+    // Validate required fields
+    for (const field of currentFields) {
+      if (field.required && !formData.atributos[field.key]) {
+        alert(`Campo obrigatório: ${field.label}`);
+        return;
+      }
     }
+    
+    onSave(formData);
+  };
+
+  const handleAtributoChange = (key: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      atributos: {
+        ...prev.atributos,
+        [key]: value
+      }
+    }));
+  };
+
+  const normalizeNumber = (value: string) => {
+    return parseFloat(value.replace(',', '.')) || 0;
   };
 
   return (
@@ -448,17 +484,76 @@ const ProductForm = ({ produto, grupos, onSave, onCancel, loading }: ProductForm
               <Label htmlFor="ativo">Ativo</Label>
             </div>
 
-            <div>
-              <Label htmlFor="atributos">Atributos (JSON)</Label>
-              <Textarea
-                id="atributos"
-                value={formData.atributos}
-                onChange={(e) => setFormData(prev => ({ ...prev, atributos: e.target.value }))}
-                rows={8}
-                className="font-mono text-sm"
-                placeholder='{"exemplo": "valor"}'
-              />
-            </div>
+            {/* Dynamic Fields based on grupo */}
+            {currentFields.length > 0 && (
+              <div>
+                <Label>Atributos</Label>
+                <div className="grid gap-4 mt-2">
+                  {currentFields.map((field) => (
+                    <div 
+                      key={field.key} 
+                      className={field.width === 'half' ? 'grid grid-cols-2 gap-4' : 'w-full'}
+                    >
+                      <div className={field.width === 'half' ? 'col-span-1' : 'w-full'}>
+                        <Label htmlFor={field.key}>
+                          {field.label}
+                          {field.required && <span className="text-red-500 ml-1">*</span>}
+                        </Label>
+                        
+                        {field.type === 'text' && (
+                          <Input
+                            id={field.key}
+                            value={formData.atributos[field.key] || ''}
+                            onChange={(e) => handleAtributoChange(field.key, e.target.value)}
+                            required={field.required}
+                          />
+                        )}
+                        
+                        {field.type === 'number' && (
+                          <Input
+                            id={field.key}
+                            type="text"
+                            value={formData.atributos[field.key] || ''}
+                            onChange={(e) => handleAtributoChange(field.key, normalizeNumber(e.target.value))}
+                            step={field.step}
+                            required={field.required}
+                          />
+                        )}
+                        
+                        {field.type === 'select' && (
+                          <Select
+                            value={formData.atributos[field.key] || ''}
+                            onValueChange={(value) => handleAtributoChange(field.key, value)}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder={`Selecione ${field.label}`} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {field.options?.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                        
+                        {field.type === 'checkbox' && (
+                          <div className="flex items-center space-x-2 mt-2">
+                            <Checkbox
+                              id={field.key}
+                              checked={!!formData.atributos[field.key]}
+                              onCheckedChange={(checked) => handleAtributoChange(field.key, checked)}
+                            />
+                            <Label htmlFor={field.key}>{field.label}</Label>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="flex justify-end space-x-2">
               <Button type="button" variant="outline" onClick={onCancel}>
