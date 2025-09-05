@@ -10,6 +10,8 @@ import HVACCalculator from "./pages/HVACCalculator";
 import VRFCalculator from "./pages/VRFCalculator";
 import DiariasCalculator from "./pages/DiariasCalculator";
 import UserManagement from "./pages/UserManagement";
+import Configuracoes from "./pages/Configuracoes";
+import TabelaProdutos from "./pages/TabelaProdutos";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
@@ -86,11 +88,31 @@ const AppContent = () => {
           } 
         />
         <Route 
+          path="/configuracoes" 
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Configuracoes />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/configuracoes/usuarios" 
           element={
             <ProtectedRoute>
               <AdminRoute>
                 <UserManagement />
+              </AdminRoute>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/configuracoes/produtos" 
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <TabelaProdutos />
               </AdminRoute>
             </ProtectedRoute>
           } 

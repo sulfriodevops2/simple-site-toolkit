@@ -14,6 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
+      produtos_diarias: {
+        Row: {
+          ativo: boolean | null
+          atributos: Json | null
+          codigo: string | null
+          created_at: string | null
+          grupo: string
+          id: string
+          nome: string
+          ordem: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo: string
+          id?: string
+          nome: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo?: string
+          id?: string
+          nome?: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      produtos_multi: {
+        Row: {
+          ativo: boolean | null
+          atributos: Json | null
+          codigo: string | null
+          created_at: string | null
+          grupo: string
+          id: string
+          nome: string
+          ordem: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo: string
+          id?: string
+          nome: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo?: string
+          id?: string
+          nome?: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      produtos_vrf: {
+        Row: {
+          ativo: boolean | null
+          atributos: Json | null
+          codigo: string | null
+          created_at: string | null
+          grupo: string
+          id: string
+          nome: string
+          ordem: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo: string
+          id?: string
+          nome: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          atributos?: Json | null
+          codigo?: string | null
+          created_at?: string | null
+          grupo?: string
+          id?: string
+          nome?: string
+          ordem?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_sessions: {
         Row: {
           created_at: string

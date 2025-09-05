@@ -104,10 +104,10 @@ export default function Index() {
           </Link>
 
           {isAdmin() && (
-            <Link to="/configuracoes/usuarios" className="group">
+            <Link to="/configuracoes" className="group">
               <HVACCard 
                 title="Configurações" 
-                description="Gerenciamento de usuários e sistema"
+                description="Usuários e tabelas de produtos"
                 variant="default"
                 className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
               >
@@ -118,7 +118,7 @@ export default function Index() {
                     </div>
                     <div>
                       <div className="font-medium text-foreground">Admin Panel</div>
-                      <div className="text-xs text-muted-foreground">Usuários • Perfis • Sistema</div>
+                      <div className="text-xs text-muted-foreground">Usuários • Produtos • Sistema</div>
                     </div>
                   </div>
                   <div className="w-8 h-8 bg-muted-foreground/10 rounded-full flex items-center justify-center group-hover:bg-muted-foreground/20 transition-colors">
