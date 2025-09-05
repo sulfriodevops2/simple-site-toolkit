@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { HVACCard } from "@/components/ui/hvac-card"
-import { Calculator, Snowflake, Wind, Thermometer, Settings } from "lucide-react"
+import { Calculator, Snowflake, Wind, Thermometer, Settings, ClipboardList } from "lucide-react"
 import { useAuth } from '@/hooks/useAuth'
 
 export default function Index() {
@@ -30,7 +30,7 @@ export default function Index() {
         </div>
 
         {/* Navigation Cards */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 ${isAdmin() ? 'lg:grid-cols-3' : ''} gap-6 w-full max-w-4xl`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${isAdmin() ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-6 w-full max-w-6xl`}>
           <Link to="/multi" className="group">
             <HVACCard 
               title="Multi Split" 
@@ -74,6 +74,30 @@ export default function Index() {
                 </div>
                 <div className="w-8 h-8 bg-primary-warm/10 rounded-full flex items-center justify-center group-hover:bg-primary-warm/20 transition-colors">
                   <Wind className="w-4 h-4 text-primary-warm" />
+                </div>
+              </div>
+            </HVACCard>
+          </Link>
+
+          <Link to="/diarias" className="group">
+            <HVACCard 
+              title="Diárias Projetos" 
+              description="Cálculo de Diárias"
+              variant="default"
+              className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center">
+                    <ClipboardList className="w-5 h-5 text-accent" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Calculadora de Diárias</div>
+                    <div className="text-xs text-muted-foreground">Estimativa de Projetos</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                  <ClipboardList className="w-4 h-4 text-accent" />
                 </div>
               </div>
             </HVACCard>

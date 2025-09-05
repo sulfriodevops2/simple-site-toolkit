@@ -8,6 +8,7 @@ import Header from "@/components/layout/Header";
 import Index from "./pages/Index";
 import HVACCalculator from "./pages/HVACCalculator";
 import VRFCalculator from "./pages/VRFCalculator";
+import DiariasCalculator from "./pages/DiariasCalculator";
 import UserManagement from "./pages/UserManagement";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -73,6 +74,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <VRFCalculator />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/diarias" 
+          element={
+            <ProtectedRoute>
+              <DiariasCalculator />
             </ProtectedRoute>
           } 
         />
