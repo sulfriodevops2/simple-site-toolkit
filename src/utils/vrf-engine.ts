@@ -26,6 +26,8 @@ export interface CalcInput {
 export const CATALOG: Record<Brand, Record<Orientation, Condenser[]>> = {
   samsung: {
     vertical: [
+      { nome: "Samsung VRF 4HP",  nominal: 41287, max: 45000 },
+      { nome: "Samsung VRF 5HP", nominal: 47738, max: 52000 },
       { nome: "Samsung VRF 8HP",  nominal: 76432, max: 85000 },
       { nome: "Samsung VRF 10HP", nominal: 95540, max: 105000 },
       { nome: "Samsung VRF 12HP", nominal: 114648, max: 125000 },
