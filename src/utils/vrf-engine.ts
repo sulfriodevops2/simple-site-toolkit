@@ -55,13 +55,13 @@ export const CATALOG: Record<Brand, Record<Orientation, Condenser[]>> = {
       { nome: "Daikin VRV IV 20HP", nominal: 192000, max: 211000 },
     ],
     horizontal: [
+      { nome: "Daikin VRF 3HP",  nominal: 25200, max: 28000 },
+      { nome: "Daikin VRF 4HP",  nominal: 35000, max: 38000 },
+      { nome: "Daikin VRF 5HP",  nominal: 43750, max: 48000 },
       { nome: "Daikin VRV H 8HP",  nominal: 76800, max: 85000 },
       { nome: "Daikin VRV H 10HP", nominal: 96000, max: 106000 },
       { nome: "Daikin VRV H 12HP", nominal: 115200, max: 127000 },
       { nome: "Daikin VRV H 14HP", nominal: 134400, max: 148000 },
-      { nome: "Daikin VRV H 16HP", nominal: 153600, max: 169000 },
-      { nome: "Daikin VRV H 18HP", nominal: 172800, max: 190000 },
-      { nome: "Daikin VRV H 20HP", nominal: 192000, max: 211000 },
     ],
   },
 };
