@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Copy, X } from 'lucide-react';
+import { Copy, X, ArrowLeft, ClipboardList } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Ambiente {
   nome: string;
@@ -150,10 +151,32 @@ export default function DiariasCalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 p-6">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-2">Calculadora de Diárias de Projetos</h1>
-        <p className="text-center text-muted-foreground mb-8">A Glória é de Deus</p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90">
+      {/* Header */}
+      <div className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-green rounded-lg flex items-center justify-center">
+                  <ClipboardList className="w-4 h-4 text-background" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-foreground">Calculadora de Diárias</h1>
+                  <p className="text-sm text-muted-foreground">Estimativa de Projetos HVAC</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="max-w-6xl mx-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Configurações */}
@@ -400,13 +423,7 @@ export default function DiariasCalculator() {
           </Card>
         </div>
 
-        <footer className="flex justify-center items-center mt-8">
-          <img 
-            src="/lovable-uploads/62ef3cac-2a46-4916-8f53-2ff94d9ca0e4.png" 
-            alt="logo sulfrio" 
-            className="max-w-12 h-12 object-contain"
-          />
-        </footer>
+        </div>
       </div>
     </div>
   );

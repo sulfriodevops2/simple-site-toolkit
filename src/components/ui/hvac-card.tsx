@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/utils"
 
 interface HVACCardProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   title?: string
   description?: string
   className?: string
@@ -43,9 +43,11 @@ export function HVACCard({
           )}
         </CardHeader>
       )}
-      <CardContent className={title ? "pt-0" : ""}>
-        {children}
-      </CardContent>
+      {children && (
+        <CardContent className={title ? "pt-0" : ""}>
+          {children}
+        </CardContent>
+      )}
     </Card>
   )
 }
