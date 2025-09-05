@@ -37,7 +37,22 @@ export default function Index() {
               description="Calculadora para sistemas Multi Split"
               variant="cool"
               className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-            />
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-cool/20 rounded-lg flex items-center justify-center">
+                    <Calculator className="w-5 h-5 text-primary-cool" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Sistemas Multi</div>
+                    <div className="text-xs text-muted-foreground">LG • Daikin • Samsung</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-primary-cool/10 rounded-full flex items-center justify-center group-hover:bg-primary-cool/20 transition-colors">
+                  <Wind className="w-4 h-4 text-primary-cool" />
+                </div>
+              </div>
+            </HVACCard>
           </Link>
 
           <Link to="/vrf" className="group">
@@ -46,7 +61,22 @@ export default function Index() {
               description="Calculadora para sistemas VRF"
               variant="warm"
               className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-            />
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-warm/20 rounded-lg flex items-center justify-center">
+                    <Thermometer className="w-5 h-5 text-primary-warm" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Sistemas VRF</div>
+                    <div className="text-xs text-muted-foreground">Variable Refrigerant Flow</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-primary-warm/10 rounded-full flex items-center justify-center group-hover:bg-primary-warm/20 transition-colors">
+                  <Wind className="w-4 h-4 text-primary-warm" />
+                </div>
+              </div>
+            </HVACCard>
           </Link>
 
           <Link to="/diarias" className="group">
@@ -55,7 +85,22 @@ export default function Index() {
               description="Cálculo de Diárias"
               variant="green"
               className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-            />
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-green/20 rounded-lg flex items-center justify-center">
+                    <ClipboardList className="w-5 h-5 text-primary-green" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground">Calculadora de Diárias</div>
+                    <div className="text-xs text-muted-foreground">Estimativa de Projetos</div>
+                  </div>
+                </div>
+                <div className="w-8 h-8 bg-primary-green/10 rounded-full flex items-center justify-center group-hover:bg-primary-green/20 transition-colors">
+                  <ClipboardList className="w-4 h-4 text-primary-green" />
+                </div>
+              </div>
+            </HVACCard>
           </Link>
 
           {isAdmin() && (
@@ -65,7 +110,22 @@ export default function Index() {
                 description="Gerenciamento de usuários e sistema"
                 variant="default"
                 className="h-full group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-              />
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-muted-foreground/20 rounded-lg flex items-center justify-center">
+                      <Settings className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-foreground">Admin Panel</div>
+                      <div className="text-xs text-muted-foreground">Usuários • Perfis • Sistema</div>
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 bg-muted-foreground/10 rounded-full flex items-center justify-center group-hover:bg-muted-foreground/20 transition-colors">
+                    <Settings className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                </div>
+              </HVACCard>
             </Link>
           )}
         </div>
