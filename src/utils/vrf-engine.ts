@@ -84,7 +84,7 @@ export function calcCondenser({ brand, orientation, simultPercent, evaps }: Calc
 
   const withLimits = list.map(c => {
     const limite = Math.round(c.nominal * (simultPercent / 100));
-    const uso = Math.round((sum / limite) * 100); // % of the limit used
+    const uso = Math.round((sum / c.nominal) * 100 * 10) / 10; // % of nominal capacity used (1 decimal)
     const status = sum <= limite ? "ok" : sum <= c.max ? "warn" : "error";
     return { ...c, limite, uso, status } as Condenser & { limite: number; uso: number; status: "ok" | "warn" | "error" };
   });
