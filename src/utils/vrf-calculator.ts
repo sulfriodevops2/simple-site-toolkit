@@ -43,6 +43,7 @@ export function calcularCondensadoraVRF(
   return {
     condensadoraIdeal: res.ideal ? { ...res.ideal, simultaneidade: `${res.ideal.uso}%` } : null,
     umaAcima: res.oneUp ? { ...res.oneUp, simultaneidade: `${res.oneUp.uso}%` } : null,
+    umaAbaixo: res.oneDown ? { ...res.oneDown, simultaneidade: `${res.oneDown.uso}%` } : null,
     somaEvaporadoras: res.sumBTUh,
     capacidadeMinima: res.minRequiredBTUh,
     marca: brand,

@@ -91,9 +91,23 @@ export function calcCondenser({ brand, orientation, simultPercent, evaps }: Calc
     return { ...c, limite, uso, status } as Condenser & { limite: number; uso: number; status: "ok" | "warn" | "error" };
   });
 
-  const idealIdx = withLimits.findIndex(c => sum <= c.limite);
-  const ideal = idealIdx >= 0 ? withLimits[idealIdx] : null;
+  // Find condensers that meet the simultaneity limit
+  const validCondensers = withLimits.filter(c => (sum / c.nominal) <= (simultPercent / 100));
+  
+  // Among valid condensers, choose the one with highest usage (closest to limit)
+  let ideal = null;
+  if (validCondensers.length > 0) {
+    ideal = validCondensers.reduce((best, current) => 
+      current.uso > best.uso ? current : best
+    );
+  }
+  
+  // Find oneUp: next condenser in the original list after the ideal
+  const idealIdx = ideal ? withLimits.findIndex(c => c.nome === ideal.nome) : -1;
   const oneUp = idealIdx >= 0 && idealIdx + 1 < withLimits.length ? withLimits[idealIdx + 1] : null;
+  
+  // Find oneDown: previous condenser in the original list before the ideal
+  const oneDown = idealIdx > 0 ? withLimits[idealIdx - 1] : null;
 
   return {
     sumBTUh: sum,
@@ -101,5 +115,6 @@ export function calcCondenser({ brand, orientation, simultPercent, evaps }: Calc
     condensers: withLimits,
     ideal,
     oneUp,
+    oneDown,
   } as const;
 }

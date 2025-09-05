@@ -298,6 +298,16 @@ export function VRFCondensadoraCalculator() {
                   </div>
                 )}
                 
+                {results[selectedBrand].umaAbaixo && (
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="font-medium">Uma abaixo: {results[selectedBrand].umaAbaixo.nome}</p>
+                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAbaixo.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
+                    <StatusChip className="bg-red-100 text-red-800 mt-1">
+                      Simultaneidade: {results[selectedBrand].umaAbaixo.simultaneidade}
+                    </StatusChip>
+                  </div>
+                )}
+                
                 {results[selectedBrand].umaAcima && (
                   <div className="p-3 bg-muted rounded-lg">
                     <p className="font-medium">Uma acima: {results[selectedBrand].umaAcima.nome}</p>
