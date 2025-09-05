@@ -64,15 +64,31 @@ export function VRFCondensadoraCalculator() {
     }
     
     const entrada = [totalCapacity];
-    const simultaneidade = simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
+    const simultaneidadeRaw = simultaneidadeValues[params.simultaneidade as keyof typeof simultaneidadeValues];
     
-    // Calcula para ambas as marcas
-    const samsungResult = calcularCondensadoraVRF(entrada, simultaneidade, "samsung", params.tipoCondensadora as any);
-    const daikinResult = calcularCondensadoraVRF(entrada, simultaneidade, "daikin", params.tipoCondensadora as any);
+    // Para Samsung, usa a simultaneidade selecionada
+    const simultaneidadeSamsung = simultaneidadeRaw;
+    
+    // Para Daikin, limita a 130% se for 145%
+    const simultaneidadeDaikin = simultaneidadeRaw > 130 ? 130 : simultaneidadeRaw;
+    
+    // Calcula para ambas as marcas com suas respectivas simultaneidades
+    const samsungResult = calcularCondensadoraVRF(entrada, simultaneidadeSamsung, "samsung", params.tipoCondensadora as any);
+    const daikinResult = calcularCondensadoraVRF(entrada, simultaneidadeDaikin, "daikin", params.tipoCondensadora as any);
 
     setResults({
-      samsung: { ...samsungResult, orientacao: params.tipoCondensadora },
-      daikin: { ...daikinResult, orientacao: params.tipoCondensadora }
+      samsung: { 
+        ...samsungResult, 
+        orientacao: params.tipoCondensadora,
+        simultaneidadeUsada: simultaneidadeSamsung,
+        simultaneidadeSelecionada: simultaneidadeRaw
+      },
+      daikin: { 
+        ...daikinResult, 
+        orientacao: params.tipoCondensadora,
+        simultaneidadeUsada: simultaneidadeDaikin,
+        simultaneidadeSelecionada: simultaneidadeRaw
+      }
     });
   };
 
@@ -263,10 +279,19 @@ export function VRFCondensadoraCalculator() {
             
             {results && evaporators.length > 0 ? (
               <div className="space-y-3 text-sm">
+                {/* Warning for Daikin with 145% */}
+                {selectedBrand === "daikin" && params.simultaneidade === "residencial" && (
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <p className="text-amber-800 dark:text-amber-200 text-sm font-medium">
+                      Atenção: na Daikin o limite é 130%. "Limite Residencial (145%)" só é permitido pela Samsung. Os cálculos abaixo consideram 130%.
+                    </p>
+                  </div>
+                )}
+                
                 {results[selectedBrand].condensadoraIdeal && (
                   <div className="p-3 bg-muted rounded-lg">
                     <p className="font-medium">Condensadora ideal: {results[selectedBrand].condensadoraIdeal.nome}</p>
-                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].condensadoraIdeal.nominal.toLocaleString()} BTU/h</p>
+                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].condensadoraIdeal.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
                     <StatusChip className="bg-green-100 text-green-800 mt-1">
                       Simultaneidade: {results[selectedBrand].condensadoraIdeal.simultaneidade}
                     </StatusChip>
@@ -276,7 +301,7 @@ export function VRFCondensadoraCalculator() {
                 {results[selectedBrand].umaAcima && (
                   <div className="p-3 bg-muted rounded-lg">
                     <p className="font-medium">Uma acima: {results[selectedBrand].umaAcima.nome}</p>
-                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAcima.nominal.toLocaleString()} BTU/h</p>
+                    <p className="text-muted-foreground">{results[selectedBrand].orientacao} - Cap. real: {results[selectedBrand].umaAcima.nominal.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "(Daikin)"}</p>
                     <StatusChip className="bg-green-100 text-green-800 mt-1">
                       Simultaneidade: {results[selectedBrand].umaAcima.simultaneidade}
                     </StatusChip>
@@ -314,12 +339,16 @@ export function VRFCondensadoraCalculator() {
             <div className="grid grid-cols-2 gap-4 text-sm mb-4">
               <div>
                 <p><strong>Marca:</strong> {results[selectedBrand].marca}</p>
-                <p><strong>Simultaneidade (selecionada):</strong> {params.simultaneidade === 'corporativo' ? '110%' : params.simultaneidade === 'padrao' ? '130%' : '145%'}</p>
-                <p><strong>Capacidade mínima requerida (após simult.):</strong> {results[selectedBrand].capacidadeMinima.toLocaleString()} BTU/h</p>
+                <p><strong>Simultaneidade (selecionada):</strong> {params.simultaneidade === 'corporativo' ? '110%' : params.simultaneidade === 'padrao' ? '130%' : '145%'}
+                  {selectedBrand === "daikin" && params.simultaneidade === "residencial" && (
+                    <span className="text-amber-600 dark:text-amber-400 text-xs ml-2">Capado p/ 130%</span>
+                  )}
+                </p>
+                <p><strong>Capacidade mínima requerida (após simult.):</strong> {results[selectedBrand].capacidadeMinima.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "unidades Daikin"}</p>
               </div>
               <div>
                 <p><strong>Orientação:</strong> {results[selectedBrand].orientacao}</p>
-                <p><strong>Soma das evaporadoras (válidas):</strong> {results[selectedBrand].somaEvaporadoras.toLocaleString()} BTU/h</p>
+                <p><strong>Soma das evaporadoras (válidas):</strong> {results[selectedBrand].somaEvaporadoras.toLocaleString()} {selectedBrand === "samsung" ? "BTU/h" : "unidades Daikin"}</p>
               </div>
             </div>
 
@@ -329,7 +358,7 @@ export function VRFCondensadoraCalculator() {
                   <th className="text-left p-2">#</th>
                   <th className="text-left p-2">Tipo</th>
                   <th className="text-left p-2">Nominal</th>
-                  <th className="text-left p-2">Real (BTU/h)</th>
+                  <th className="text-left p-2">Real ({selectedBrand === "samsung" ? "BTU/h" : "unidades Daikin"})</th>
                   <th className="text-left p-2">Qtd</th>
                   <th className="text-left p-2">Ações</th>
                 </tr>
