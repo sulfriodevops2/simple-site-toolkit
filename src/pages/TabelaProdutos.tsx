@@ -11,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { ArrowLeft, Plus, Edit, Trash2, Search, Save, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface Produto {
   id: string;
@@ -54,7 +54,7 @@ const TabelaProdutos = () => {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [filteredProdutos, setFilteredProdutos] = useState<Produto[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedGrupo, setSelectedGrupo] = useState('');
+  const [selectedGrupo, setSelectedGrupo] = useState('all');
   const [editingProduct, setEditingProduct] = useState<Produto | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -110,7 +110,7 @@ const TabelaProdutos = () => {
       );
     }
     
-    if (selectedGrupo) {
+    if (selectedGrupo && selectedGrupo !== 'all') {
       filtered = filtered.filter(p => p.grupo === selectedGrupo);
     }
     
@@ -121,8 +121,8 @@ const TabelaProdutos = () => {
     setLoading(true);
     try {
       const data = {
-        grupo: produto.grupo,
-        nome: produto.nome,
+        grupo: produto.grupo || '',
+        nome: produto.nome || '',
         codigo: produto.codigo || null,
         ordem: produto.ordem || 0,
         ativo: produto.ativo ?? true,
@@ -267,7 +267,7 @@ const TabelaProdutos = () => {
                           <SelectValue placeholder="Todos os grupos" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">Todos os grupos</SelectItem>
+                          <SelectItem value="all">Todos os grupos</SelectItem>
                           {getCurrentGrupos().map((grupo) => (
                             <SelectItem key={grupo.value} value={grupo.value}>
                               {grupo.label}
